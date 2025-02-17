@@ -34,7 +34,7 @@ import backend.Difficulty;
 import backend.Mods;
 import backend.Language;
 
-import backend.ui.*; //Psych-UI
+import backend.ui.*; // Psych-UI
 
 import objects.Alphabet;
 import objects.BGSprite;
@@ -47,7 +47,7 @@ import flxanimate.*;
 import flxanimate.PsychFlxAnimate as FlxAnimate;
 #end
 
-//Flixel
+// Flixel
 import flixel.sound.FlxSound;
 import flixel.FlxG;
 import flixel.FlxSprite;

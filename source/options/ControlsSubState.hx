@@ -8,15 +8,23 @@ import objects.AttachedSprite;
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
-import flixel.input.gamepad.FlxGamepadManager;
 
 class ControlsSubState extends MusicBeatSubstate
 {
 	var curSelected:Int = 0;
 	var curAlt:Bool = false;
 
-	//Show on gamepad - Display name - Save file key - Rebind display name
-	var options:Array<Dynamic> = [
+	/**
+	 * The different key binds that can be rebinded with a key of the player's choice.
+	 * It is consisted of lists with the following layout (in the order of the values for each list):
+	 * - `Bool`: Should the bind show up when gamepad mode is enabled?
+	 * - `String`: Display name for the bind.
+	 *   - This will be either replaced as the column title or a blank space if there is no value.
+	 * - `String`: The ID of the keybind.
+	 *   - You can find a keybind's ID in the `keyBinds` variable, which is located in the `backend.ClientPrefs` class.
+	 * - `String`: The display name for when you are rebinding the said key.
+	 */
+	var bindOptions:Array<Dynamic> = [
 		[true, 'NOTES'],
 		[true, 'Left', 'note_left', 'Note Left'],
 		[true, 'Down', 'note_down', 'Note Down'],
@@ -29,10 +37,12 @@ class ControlsSubState extends MusicBeatSubstate
 		[true, 'Up', 'ui_up', 'UI Up'],
 		[true, 'Right', 'ui_right', 'UI Right'],
 		[true],
+		[true, 'MISC.'],
 		[true, 'Reset', 'reset', 'Reset'],
 		[true, 'Accept', 'accept', 'Accept'],
 		[true, 'Back', 'back', 'Back'],
 		[true, 'Pause', 'pause', 'Pause'],
+		[false, 'Fullscreen', 'fullscreen', 'Fullscreen'],
 		[false],
 		[false, 'VOLUME'],
 		[false, 'Mute', 'volume_mute', 'Volume Mute'],
@@ -68,9 +78,9 @@ class ControlsSubState extends MusicBeatSubstate
 		DiscordClient.changePresence("Controls Menu", null);
 		#end
 
-		options.push([true]);
-		options.push([true]);
-		options.push([true, defaultKey]);
+		bindOptions.push([true]);
+		bindOptions.push([true]);
+		bindOptions.push([true, defaultKey]);
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = keyboardColor;
@@ -127,7 +137,7 @@ class ControlsSubState extends MusicBeatSubstate
 		grpBinds.clear();
 
 		var myID:Int = 0;
-		for (i => option in options)
+		for (i => option in bindOptions)
 		{
 			if(onKeyboardMode || option[0])
 			{
@@ -295,7 +305,7 @@ class ControlsSubState extends MusicBeatSubstate
 
 			if(FlxG.keys.justPressed.ENTER || FlxG.gamepads.anyJustPressed(START) || FlxG.gamepads.anyJustPressed(A))
 			{
-				if(options[curOptions[curSelected]][1] != defaultKey)
+				if(bindOptions[curOptions[curSelected]][1] != defaultKey)
 				{
 					bindingBlack = new FlxSprite().makeGraphic(1, 1, /*FlxColor.BLACK*/ FlxColor.WHITE);
 					bindingBlack.scale.set(FlxG.width, FlxG.height);
@@ -304,7 +314,7 @@ class ControlsSubState extends MusicBeatSubstate
 					FlxTween.tween(bindingBlack, {alpha: 0.6}, 0.35, {ease: FlxEase.linear});
 					add(bindingBlack);
 
-					bindingText = new Alphabet(FlxG.width / 2, 160, Language.getPhrase('controls_rebinding', 'Rebinding {1}', [options[curOptions[curSelected]][3]]), false);
+					bindingText = new Alphabet(FlxG.width / 2, 160, Language.getPhrase('controls_rebinding', 'Rebinding {1}', [bindOptions[curOptions[curSelected]][3]]), false);
 					bindingText.alignment = CENTERED;
 					add(bindingText);
 					
@@ -333,7 +343,7 @@ class ControlsSubState extends MusicBeatSubstate
 		else
 		{
 			var altNum:Int = curAlt ? 1 : 0;
-			var curOption:Array<Dynamic> = options[curOptions[curSelected]];
+			var curOption:Array<Dynamic> = bindOptions[curOptions[curSelected]];
 			if(FlxG.keys.pressed.ESCAPE || FlxG.gamepads.anyPressed(B))
 			{
 				holdingEsc += elapsed;
@@ -431,7 +441,7 @@ class ControlsSubState extends MusicBeatSubstate
 							curButtons[1 - altNum] = FlxGamepadInputID.NONE;
 					}
 
-					var option:String = options[curOptions[curSelected]][2];
+					var option:String = bindOptions[curOptions[curSelected]][2];
 					ClientPrefs.clearInvalidKeys(option);
 					for (n in 0...2)
 					{

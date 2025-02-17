@@ -3,41 +3,30 @@ package;
 #if android
 import android.content.Context;
 #end
-
 import debug.FPSCounter;
-
-import flixel.graphics.FlxGraphic;
 import flixel.FlxGame;
-import flixel.FlxState;
-import haxe.io.Path;
-import openfl.Assets;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.display.StageScaleMode;
 import lime.app.Application;
-import states.TitleState;
 
 #if HSCRIPT_ALLOWED
 import crowplexus.iris.Iris;
 import psychlua.HScript.HScriptInfos;
 #end
-
 #if linux
 import lime.graphics.Image;
 #end
-
 #if desktop
-import backend.ALSoftConfig; // Just to make sure DCE doesn't remove this, since it's not directly referenced anywhere else.
+import backend.ALSoftConfig; // Just to make sure DCE doesn't remove this, since it's not directly referenced anywhere else
 #end
-
-//crash handler stuff
+// Crash handler stuff
 #if CRASH_HANDLER
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
 import haxe.io.Path;
 #end
-
 import backend.Highscore;
 
 // NATIVE API STUFF, YOU CAN IGNORE THIS AND SCROLL //
@@ -59,24 +48,43 @@ import backend.Highscore;
 extern "C" HRESULT WINAPI SetCurrentProcessExplicitAppUserModelID(PCWSTR AppID);
 ')
 #end
-// // // // // // // // //
+
+/**
+ * The main class that starts the entire game.
+ * Other than changing info in the `_game` variable, you will not really
+ * need to even touch this file. If you want to change things in the intro, then
+ * modify the `TitleState.hx` file; otherwise, your code should go into your states.
+ */
 class Main extends Sprite
 {
-	var game = {
-		width: 1280, // WINDOW width
-		height: 720, // WINDOW height
-		initialState: TitleState, // initial game state
-		framerate: 60, // default framerate
-		skipSplash: true, // if the default flixel splash screen should be skipped
-		startFullscreen: false // if the game should start at fullscreen mode
+	/**
+	 * JSON object for holding all of the info about the game.
+	 */
+	private var _game = {
+		// Window width (you can set this to 0 to use the default width in the Project.xml file)
+		width: 1280,
+		// Window height (you can set this to 0 to use the default height in the Project.xml file)
+		height: 720,
+		// The entrypoint of the game
+		initialState: InitState, 
+		// The default framerate (how fast the game should update)
+		framerate: 60, 
+		// Should the HaxeFlixel splash screen be skipped?
+		skipSplash: true, 
+		// Should the game start in fullscreen?
+		startFullscreen: false
 	};
 
+	/**
+	 * The FPS counter you see in the top left corner of your screen.
+	 */
 	public static var fpsVar:FPSCounter;
 
-	// You can pretty much ignore everything from here on - your code should go in your states.
+	// You can pretty much ignore everything from here on :p
 
 	public static function main():Void
 	{
+		// Add the Main class to the current library
 		Lib.current.addChild(new Main());
 	}
 
@@ -85,20 +93,23 @@ class Main extends Sprite
 		super();
 
 		#if windows
-		// DPI Scaling fix for windows 
+		// DPI scaling fix for windows
 		// this shouldn't be needed for other systems
 		// Credit to YoshiCrafter29 for finding this function
 		untyped __cpp__("SetProcessDPIAware();");
 		#end
 
 		// Credits to MAJigsaw77 (he's the og author for this code)
+		// This changes the current working directory based on what platform the game
+		// is being run on
 		#if android
 		Sys.setCwd(Path.addTrailingSlash(Context.getExternalFilesDir()));
 		#elseif ios
 		Sys.setCwd(lime.system.System.applicationStorageDirectory);
 		#end
+
 		#if VIDEOS_ALLOWED
-		hxvlc.util.Handle.init(#if (hxvlc >= "1.8.0")  ['--no-lua'] #end);
+		hxvlc.util.Handle.init(#if (hxvlc >= "1.8.0") ['--no-lua'] #end);
 		#end
 
 		#if LUA_ALLOWED
@@ -110,54 +121,66 @@ class Main extends Sprite
 		Highscore.load();
 
 		#if HSCRIPT_ALLOWED
-		Iris.warn = function(x, ?pos:haxe.PosInfos) {
+		Iris.warn = function(x, ?pos:haxe.PosInfos)
+		{
 			Iris.logLevel(WARN, x, pos);
 			var newPos:HScriptInfos = cast pos;
-			if (newPos.showLine == null) newPos.showLine = true;
-			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
+			if (newPos.showLine == null)
+				newPos.showLine = true;
+			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '') + '${newPos.fileName}:';
 			#if LUA_ALLOWED
-			if (newPos.isLua == true) {
+			if (newPos.isLua == true)
+			{
 				msgInfo += 'HScript:';
 				newPos.showLine = false;
 			}
 			#end
-			if (newPos.showLine == true) {
+			if (newPos.showLine == true)
+			{
 				msgInfo += '${newPos.lineNumber}:';
 			}
 			msgInfo += ' $x';
 			if (PlayState.instance != null)
 				PlayState.instance.addTextToDebug('WARNING: $msgInfo', FlxColor.YELLOW);
 		}
-		Iris.error = function(x, ?pos:haxe.PosInfos) {
+		Iris.error = function(x, ?pos:haxe.PosInfos)
+		{
 			Iris.logLevel(ERROR, x, pos);
 			var newPos:HScriptInfos = cast pos;
-			if (newPos.showLine == null) newPos.showLine = true;
-			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
+			if (newPos.showLine == null)
+				newPos.showLine = true;
+			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '') + '${newPos.fileName}:';
 			#if LUA_ALLOWED
-			if (newPos.isLua == true) {
+			if (newPos.isLua == true)
+			{
 				msgInfo += 'HScript:';
 				newPos.showLine = false;
 			}
 			#end
-			if (newPos.showLine == true) {
+			if (newPos.showLine == true)
+			{
 				msgInfo += '${newPos.lineNumber}:';
 			}
 			msgInfo += ' $x';
 			if (PlayState.instance != null)
 				PlayState.instance.addTextToDebug('ERROR: $msgInfo', FlxColor.RED);
 		}
-		Iris.fatal = function(x, ?pos:haxe.PosInfos) {
+		Iris.fatal = function(x, ?pos:haxe.PosInfos)
+		{
 			Iris.logLevel(FATAL, x, pos);
 			var newPos:HScriptInfos = cast pos;
-			if (newPos.showLine == null) newPos.showLine = true;
-			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '')  + '${newPos.fileName}:';
+			if (newPos.showLine == null)
+				newPos.showLine = true;
+			var msgInfo:String = (newPos.funcName != null ? '(${newPos.funcName}) - ' : '') + '${newPos.fileName}:';
 			#if LUA_ALLOWED
-			if (newPos.isLua == true) {
+			if (newPos.isLua == true)
+			{
 				msgInfo += 'HScript:';
 				newPos.showLine = false;
 			}
 			#end
-			if (newPos.showLine == true) {
+			if (newPos.showLine == true)
+			{
 				msgInfo += '${newPos.lineNumber}:';
 			}
 			msgInfo += ' $x';
@@ -170,14 +193,15 @@ class Main extends Sprite
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-		addChild(new FlxGame(game.width, game.height, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
+		addChild(new FlxGame(_game.width, _game.height, _game.initialState, _game.framerate, _game.framerate, _game.skipSplash, _game.startFullscreen));
 
 		#if !mobile
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-		if(fpsVar != null) {
+		if (fpsVar != null)
+		{
 			fpsVar.visible = ClientPrefs.data.showFPS;
 		}
 		#end
@@ -195,7 +219,7 @@ class Main extends Sprite
 		FlxG.fixedTimestep = false;
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.keys.preventDefaultKeys = [TAB];
-		
+
 		#if CRASH_HANDLER
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
@@ -204,29 +228,33 @@ class Main extends Sprite
 		DiscordClient.prepare();
 		#end
 
-		// shader coords fix
-		FlxG.signals.gameResized.add(function (w, h) {
-		     if (FlxG.cameras != null) {
-			   for (cam in FlxG.cameras.list) {
-				if (cam != null && cam.filters != null)
-					resetSpriteCache(cam.flashSprite);
-			   }
+		// Shader coords fix
+		FlxG.signals.gameResized.add(function(w, h)
+		{
+			if (FlxG.cameras != null)
+			{
+				for (cam in FlxG.cameras.list)
+				{
+					if (cam != null && cam.filters != null)
+						resetSpriteCache(cam.flashSprite);
+				}
 			}
 
 			if (FlxG.game != null)
-			resetSpriteCache(FlxG.game);
+				resetSpriteCache(FlxG.game);
 		});
 	}
 
-	static function resetSpriteCache(sprite:Sprite):Void {
+	static function resetSpriteCache(sprite:Sprite):Void
+	{
 		@:privateAccess {
-		        sprite.__cacheBitmap = null;
+			sprite.__cacheBitmap = null;
 			sprite.__cacheBitmapData = null;
 		}
 	}
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
-	// very cool person for real they don't get enough credit for their work
+	// Very cool person for real they don't get enough credit for their work
 	#if CRASH_HANDLER
 	function onCrash(e:UncaughtErrorEvent):Void
 	{
@@ -238,7 +266,7 @@ class Main extends Sprite
 		dateNow = dateNow.replace(" ", "_");
 		dateNow = dateNow.replace(":", "'");
 
-		path = "./crash/" + "PsychEngine_" + dateNow + ".txt";
+		path = "./crash/" + "EverboundEngine_" + dateNow + ".txt";
 
 		for (stackItem in callStack)
 		{
@@ -252,10 +280,11 @@ class Main extends Sprite
 		}
 
 		errMsg += "\nUncaught Error: " + e.error;
-		// remove if you're modding and want the crash log message to contain the link
-		// please remember to actually modify the link for the github page to report the issues to.
+		// PLEASE READ IF YOU ARE A MODDER!!
+		// If you are modding the game directly from the source, then you will most likely want to remove the provided link
+		// Otherwise, modify it to your mod's GitHub repository or whatever website you hold your project on
 		#if officialBuild
-		errMsg += "\nPlease report this error to the GitHub page: https://github.com/ShadowMario/FNF-PsychEngine";
+		errMsg += "\nPlease report this error to the GitHub page: https://github.com/korithekoder/FNF-EverboundEngine";
 		#end
 		errMsg += "\n\n> Crash Handler written by: sqirra-rng";
 

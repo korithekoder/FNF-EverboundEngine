@@ -35,13 +35,13 @@ typedef NoteSplashData = {
  * The note object used as a data structure to spawn and manage notes during gameplay.
  * 
  * If you want to make a custom note type, you should search for: "function set_noteType"
-**/
+ */
 class Note extends FlxSprite
 {
 	//This is needed for the hardcoded note types to appear on the Chart Editor,
 	//It's also used for backwards compatibility with 0.1 - 0.3.2 charts.
 	public static final defaultNoteTypes:Array<String> = [
-		'', //Always leave this one empty pls
+		'', // Always leave this one empty!!
 		'Alt Animation',
 		'Hey!',
 		'Hurt Note',

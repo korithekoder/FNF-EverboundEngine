@@ -1,19 +1,16 @@
-#if LUA_ALLOWED
 package psychlua;
+
+#if LUA_ALLOWED
 
 import backend.WeekData;
 import backend.Highscore;
 import backend.Song;
+import backend.Constants;
 
-import openfl.Lib;
-import openfl.utils.Assets;
-import openfl.display.BitmapData;
 import flixel.FlxBasic;
 import flixel.FlxObject;
-import flixel.FlxState;
 
 #if (!flash && sys)
-import flixel.addons.display.FlxRuntimeShader;
 #end
 
 import cutscenes.DialogueBoxPsych;
@@ -21,9 +18,7 @@ import cutscenes.DialogueBoxPsych;
 import objects.StrumNote;
 import objects.Note;
 import objects.NoteSplash;
-import objects.Character;
 
-import states.MainMenuState;
 import states.StoryMenuState;
 import states.FreeplayState;
 
@@ -35,13 +30,9 @@ import psychlua.LuaUtils.LuaTweenOptions;
 #if HSCRIPT_ALLOWED
 import psychlua.HScript;
 #end
-import psychlua.DebugLuaText;
 import psychlua.ModchartSprite;
 
-import flixel.input.keyboard.FlxKey;
-import flixel.input.gamepad.FlxGamepadInputID;
 
-import haxe.Json;
 
 class FunkinLua {
 	public var lua:State = null;
@@ -84,7 +75,7 @@ class FunkinLua {
 		set('Function_Continue', LuaUtils.Function_Continue);
 		set('luaDebugMode', false);
 		set('luaDeprecatedWarnings', true);
-		set('version', MainMenuState.psychEngineVersion.trim());
+		set('version', Constants.EVERBOUND_ENGINE_VERSION.trim());
 		set('modFolder', this.modFolder);
 
 		// Song/Week shit

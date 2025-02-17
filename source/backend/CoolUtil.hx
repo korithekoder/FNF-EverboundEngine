@@ -1,14 +1,14 @@
 package backend;
 
-import openfl.utils.Assets;
-import lime.utils.Assets as LimeAssets;
+
+import backend.Constants;
 
 class CoolUtil
 {
 	public static function checkForUpdates(url:String = null):String {
 		if (url == null || url.length == 0)
-			url = "https://raw.githubusercontent.com/ShadowMario/FNF-PsychEngine/main/gitVersion.txt";
-		var version:String = states.MainMenuState.psychEngineVersion.trim();
+			url = "https://raw.githubusercontent.com/korithekoder/FNF-EverboundEngine/main/gitVersion.txt";
+		var version:String = Constants.EVERBOUND_ENGINE_VERSION.trim();
 		if(ClientPrefs.data.checkForUpdates) {
 			trace('checking for updates...');
 			var http = new haxe.Http(url);
@@ -17,7 +17,7 @@ class CoolUtil
 				var newVersion:String = data.split('\n')[0].trim();
 				trace('version online: $newVersion, your version: $version');
 				if(newVersion != version) {
-					trace('versions arent matching! please update');
+					trace('versions aren\'t matching! please update');
 					version = newVersion;
 					http.onData = null;
 					http.onError = null;

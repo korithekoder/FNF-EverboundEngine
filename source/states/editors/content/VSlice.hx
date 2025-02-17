@@ -1,9 +1,9 @@
 package states.editors.content;
 
+import backend.Constants;
 import backend.Song;
 import backend.Difficulty;
 
-import flixel.math.FlxMath;
 import flixel.util.FlxSort;
 
 // Chart
@@ -98,7 +98,7 @@ class VSlice
 		timeChanges.shift();
 
 		var stage:String = metadata.playData.stage;
-		switch(stage) //Psych and VSlice use different names for some stages
+		switch(stage)
 		{
 			case 'mainStage':
 				stage = 'stage';
@@ -264,7 +264,7 @@ class VSlice
 
 			Reflect.setField(swagSong, 'artist', metadata.artist);
 			Reflect.setField(swagSong, 'charter', metadata.charter);
-			Reflect.setField(swagSong, 'generatedBy', 'Psych Engine v${MainMenuState.psychEngineVersion} - Chart Editor V-Slice Importer');
+			Reflect.setField(swagSong, 'generatedBy', 'Everbound Engine v${Constants.EVERBOUND_ENGINE_VERSION} - Chart Editor V-Slice Importer');
 			songDifficulties.set(diff, swagSong);
 		}
 		var pack:PsychPackage = {difficulties: songDifficulties, events: null};
@@ -329,7 +329,7 @@ class VSlice
 		}
 
 		var notes:Array<VSliceNote> = [];
-		var generatedBy:String = 'Psych Engine v${MainMenuState.psychEngineVersion} - Chart Editor V-Slice Exporter';
+		var generatedBy:String = 'Everbound Engine v${Constants.EVERBOUND_ENGINE_VERSION} - Chart Editor V-Slice Exporter';
 		var timeChanges:Array<VSliceTimeChange> = [];
 		
 		var time:Float = 0;

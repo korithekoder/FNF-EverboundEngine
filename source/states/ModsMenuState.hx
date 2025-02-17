@@ -1,19 +1,14 @@
 package states;
 
-import backend.WeekData;
+import backend.util.CacheUtil;
 import backend.Mods;
 
-import flixel.FlxBasic;
 import flixel.graphics.FlxGraphic;
-import flash.geom.Rectangle;
-import haxe.Json;
 
 import flixel.util.FlxSpriteUtil;
-import objects.AttachedSprite;
 import options.ModSettingsSubState;
 
 import openfl.display.BitmapData;
-import lime.utils.Assets;
 
 class ModsMenuState extends MusicBeatState
 {
@@ -314,8 +309,7 @@ class ModsMenuState extends MusicBeatState
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			if(waitingToRestart)
 			{
-				//MusicBeatState.switchState(new TitleState());
-				TitleState.initialized = false;
+				CacheUtil.isInitialized = false;
 				TitleState.closedState = false;
 				FlxG.sound.music.fadeOut(0.3);
 				if(FreeplayState.vocals != null)

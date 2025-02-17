@@ -10,12 +10,14 @@ import hxdiscord_rpc.Types;
 
 import flixel.util.FlxStringUtil;
 
+import backend.Constants;
+
 class DiscordClient
 {
 	public static var isInitialized:Bool = false;
 	private inline static final _defaultID:String = "863222024192262205";
 	public static var clientID(default, set):String = _defaultID;
-	private static var presence:DiscordPresence = new DiscordPresence();
+	private static var _presence:DiscordPresence = new DiscordPresence();
 	// hides this field from scripts and reflection in general
 	@:unreflective private static var __thread:Thread;
 
@@ -104,14 +106,14 @@ class DiscordClient
 		if (hasStartTimestamp) startTimestamp = Date.now().getTime();
 		if (endTimestamp > 0) endTimestamp = startTimestamp + endTimestamp;
 
-		presence.state = state;
-		presence.details = details;
-		presence.smallImageKey = smallImageKey;
-		presence.largeImageKey = largeImageKey;
-		presence.largeImageText = "Engine Version: " + states.MainMenuState.psychEngineVersion;
+		_presence.state = state;
+		_presence.details = details;
+		_presence.smallImageKey = smallImageKey;
+		_presence.largeImageKey = largeImageKey;
+		_presence.largeImageText = "Engine Version: " + Constants.EVERBOUND_ENGINE_VERSION;
 		// Obtained times are in milliseconds so they are divided so Discord can use it
-		presence.startTimestamp = Std.int(startTimestamp / 1000);
-		presence.endTimestamp = Std.int(endTimestamp / 1000);
+		_presence.startTimestamp = Std.int(startTimestamp / 1000);
+		_presence.endTimestamp = Std.int(endTimestamp / 1000);
 		updatePresence();
 
 		//trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp, $largeImageKey');
@@ -119,7 +121,7 @@ class DiscordClient
 
 	public static function updatePresence()
 	{
-		Discord.UpdatePresence(cpp.RawConstPointer.addressOf(presence.__presence));
+		Discord.UpdatePresence(cpp.RawConstPointer.addressOf(_presence.__presence));
 	}
 	
 	inline public static function resetClientID()

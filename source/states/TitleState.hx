@@ -1,21 +1,13 @@
 package states;
 
-import backend.WeekData;
+import backend.util.CacheUtil;
 
-import flixel.input.keyboard.FlxKey;
-import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.frames.FlxFrame;
 import flixel.group.FlxGroup;
 import flixel.input.gamepad.FlxGamepad;
-import haxe.Json;
-
-import openfl.Assets;
-import openfl.display.Bitmap;
-import openfl.display.BitmapData;
 
 import shaders.ColorSwap;
 
-import states.StoryMenuState;
 import states.MainMenuState;
 
 typedef TitleData =
@@ -35,14 +27,11 @@ typedef TitleData =
 	@:optional var idle:Bool;
 }
 
+/**
+ * State that displays the cool swagger shit before the start screen.
+ */
 class TitleState extends MusicBeatState
 {
-	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
-	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
-	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
-
-	public static var initialized:Bool = false;
-
 	var credGroup:FlxGroup = new FlxGroup();
 	var textGroup:FlxGroup = new FlxGroup();
 	var blackScreen:FlxSprite;
@@ -66,35 +55,9 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		Paths.clearStoredMemory();
-		super.create();
-		Paths.clearUnusedMemory();
-
-		if(!initialized)
-		{
-			ClientPrefs.loadPrefs();
-			Language.reloadPhrases();
-		}
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
-		if(!initialized)
-		{
-			if(FlxG.save.data != null && FlxG.save.data.fullscreen)
-			{
-				FlxG.fullscreen = FlxG.save.data.fullscreen;
-				//trace('LOADED FULLSCREEN SETTING!!');
-			}
-			persistentUpdate = true;
-			persistentDraw = true;
-		}
-
-		if (FlxG.save.data.weekCompleted != null)
-		{
-			StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
-		}
-
-		FlxG.mouse.visible = false;
 		#if FREEPLAY
 		MusicBeatState.switchState(new FreeplayState());
 		#elseif CHARTING
@@ -120,7 +83,7 @@ class TitleState extends MusicBeatState
 	function startIntro()
 	{
 		persistentUpdate = true;
-		if (!initialized && FlxG.sound.music == null)
+		if (!CacheUtil.isInitialized && FlxG.sound.music == null)
 			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 
 		loadJsonData();
@@ -203,10 +166,10 @@ class TitleState extends MusicBeatState
 		add(credGroup);
 		add(ngSpr);
 
-		if (initialized)
+		if (CacheUtil.isInitialized)
 			skipIntro();
 		else
-			initialized = true;
+			CacheUtil.isInitialized = true;
 
 		// credGroup.add(credTextShit);
 	}
@@ -253,7 +216,7 @@ class TitleState extends MusicBeatState
 				}
 				catch(e:haxe.Exception)
 				{
-					trace('[WARN] Title JSON might broken, ignoring issue...\n${e.details()}');
+					trace('[WARN] Title JSON might be broken, ignoring issue...\n${e.details()}');
 				}
 			}
 			else trace('[WARN] No Title JSON detected, using default values.');
@@ -358,7 +321,7 @@ class TitleState extends MusicBeatState
 
 		// EASTER EGG
 
-		if (initialized && !transitioning && skippedIntro)
+		if (CacheUtil.isInitialized && !transitioning && skippedIntro)
 		{
 			if (newTitle && !pressedEnter)
 			{
@@ -446,7 +409,7 @@ class TitleState extends MusicBeatState
 			#end
 		}
 
-		if (initialized && pressedEnter && !skippedIntro)
+		if (CacheUtil.isInitialized && pressedEnter && !skippedIntro)
 		{
 			skipIntro();
 		}
@@ -527,10 +490,9 @@ class TitleState extends MusicBeatState
 					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 					FlxG.sound.music.fadeIn(4, 0, 0.7);
 				case 2:
-					createCoolText(['Psych Engine by'], 40);
+					createCoolText(['Everbound Engine by'], 40);
 				case 4:
-					addMoreText('Shadow Mario', 40);
-					addMoreText('Riveren', 40);
+					addMoreText('korithekoder', 40);
 				case 5:
 					deleteCoolText();
 				case 6:
@@ -552,8 +514,7 @@ class TitleState extends MusicBeatState
 				case 15:
 					addMoreText('Night');
 				case 16:
-					addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
-
+					addMoreText('Funkin');
 				case 17:
 					skipIntro();
 			}
