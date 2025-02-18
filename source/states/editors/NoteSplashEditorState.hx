@@ -45,7 +45,7 @@ class NoteSplashEditorState extends MusicBeatState
         DiscordClient.changePresence('Note Splash Editor');
         #end
 
-        var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+        var bg:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image('menuDesat'));
         bg.scrollFactor.set();
         bg.color = 0xFF505050;
         add(bg);      
@@ -278,7 +278,7 @@ class NoteSplashEditorState extends MusicBeatState
             errorText.color = FlxColor.RED;
             FlxTween.cancelTweensOf(errorText);
 
-            var image = Paths.image(imageSkin);
+            var image = PathsUtil.image(imageSkin);
             if (image == null)
             {
                 errorText.text = 'ERROR! Couldn\'t find $imageSkin.png';

@@ -53,11 +53,11 @@ class DialogueBoxPsych extends FlxSpriteGroup
 		super();
 
 		//precache sounds
-		Paths.sound('dialogue');
-		Paths.sound('dialogueClose');
+		PathsUtil.sound('dialogue');
+		PathsUtil.sound('dialogueClose');
 
 		if(song != null && song != '') {
-			FlxG.sound.playMusic(Paths.music(song), 0);
+			FlxG.sound.playMusic(PathsUtil.music(song), 0);
 			FlxG.sound.music.fadeIn(2, 0, 1);
 		}
 		
@@ -72,7 +72,7 @@ class DialogueBoxPsych extends FlxSpriteGroup
 
 		box = new FlxSprite(70, 370);
 		box.antialiasing = ClientPrefs.data.antialiasing;
-		box.frames = Paths.getSparrowAtlas('speech_bubble');
+		box.frames = PathsUtil.getSparrowAtlas('speech_bubble');
 		box.scrollFactor.set();
 		box.animation.addByPrefix('normal', 'speech bubble normal', 24);
 		box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
@@ -202,7 +202,7 @@ class DialogueBoxPsych extends FlxSpriteGroup
 				} else {
 					startNextDialog();
 				}
-				FlxG.sound.play(Paths.sound(closeSound), closeVolume);
+				FlxG.sound.play(PathsUtil.sound(closeSound), closeVolume);
 			} else if(daText.finishedText) {
 				var char:DialogueCharacter = arrayCharacters[lastCharacter];
 				if(char != null && char.animation.curAnim != null && char.animationIsLoop() && char.animation.finished) {

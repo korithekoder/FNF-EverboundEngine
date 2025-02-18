@@ -1,7 +1,7 @@
-package backend;
+package backend.display;
 
 import flixel.FlxState;
-import backend.PsychCamera;
+import backend.display.PsychCamera;
 
 class MusicBeatState extends FlxState
 {

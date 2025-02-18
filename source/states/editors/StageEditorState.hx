@@ -1,7 +1,7 @@
 package states.editors;
 
-import backend.StageData;
-import backend.PsychCamera;
+import backend.data.StageData;
+import backend.display.PsychCamera;
 import objects.Character;
 import psychlua.LuaUtils;
 
@@ -64,8 +64,8 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 	var selectionSprites:FlxSpriteGroup = new FlxSpriteGroup();
 	override function create()
 	{
-		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
+		PathsUtil.clearStoredMemory();
+		PathsUtil.clearUnusedMemory();
 
 		camGame = initPsychCamera();
 		camHUD = new FlxCamera();
@@ -120,7 +120,7 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 		var weekDir:String = stageJson.directory;
 		if (weekDir != null && weekDir.length > 0 && weekDir != '') directory = weekDir;
 
-		Paths.setCurrentLevel(directory);
+		PathsUtil.setCurrentLevel(directory);
 		trace('Setting asset folder to ' + directory);
 	}
 
@@ -271,7 +271,7 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 		visibilityFilterUpdate();
 
 		posTxt = new FlxText(0, 50, 500, 'X: 0\nY: 0', 24);
-		posTxt.setFormat(Paths.font('vcr.ttf'), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		posTxt.setFormat(PathsUtil.font('vcr.ttf'), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		posTxt.borderSize = 2;
 		posTxt.cameras = [camHUD];
 		posTxt.screenCenter(X);
@@ -451,8 +451,8 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 		outputTxt.text = txt;
 		outputTime = 3;
 		
-		if(isError) FlxG.sound.play(Paths.sound('cancelMenu'), 0.4);
-		else FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		if(isError) FlxG.sound.play(PathsUtil.sound('cancelMenu'), 0.4);
+		else FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.4);
 	}
 
 	var createPopup:FlxSpriteGroup;
@@ -993,7 +993,7 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 		var tab_group = UI_box.getTab('Meta').menu;
 
 		var characterList = Mods.mergeAllTextsNamed('data/characterList.txt');
-		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'characters/');
+		var foldersToCheck:Array<String> = Mods.directoriesWithFile(PathsUtil.getSharedPath(), 'characters/');
 		for (folder in foldersToCheck)
 			for (file in FileSystem.readDirectory(folder))
 				if(file.toLowerCase().endsWith('.json'))
@@ -1128,7 +1128,7 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 		stageDropDown = new PsychUIDropDownMenu(10, 30, [''], function(sel:Int, selected:String)
 		{
 			var characterPath:String = 'stages/$selected.json';
-			var path:String = Paths.getPath(characterPath, TEXT, null, true);
+			var path:String = PathsUtil.getPath(characterPath, TEXT, null, true);
 			#if MODS_ALLOWED
 			if (FileSystem.exists(path))
 			#else
@@ -1147,7 +1147,7 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 			}
 			else
 			{
-				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 				reloadStageDropDown();
 			}
 		});
@@ -1284,7 +1284,7 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 	function reloadStageDropDown()
 	{
 		var stageList:Array<String> = [];
-		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'stages/');
+		var foldersToCheck:Array<String> = Mods.directoriesWithFile(PathsUtil.getSharedPath(), 'stages/');
 		for (folder in foldersToCheck)
 			for (file in FileSystem.readDirectory(folder))
 				if(file.toLowerCase().endsWith('.json'))
@@ -1352,7 +1352,7 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 			if(!unsavedProgress)
 			{
 				MusicBeatState.switchState(new states.editors.MasterEditorMenu());
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FlxG.sound.playMusic(PathsUtil.music('freakyMenu'));
 			}
 			else openSubState(new ExitConfirmationPrompt());
 			return;
@@ -1681,8 +1681,8 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 		{
 			if(_makeNewSprite != null)
 			{
-				if(_makeNewSprite == 'animatedSprite' && !Paths.fileExists('images/$imageToLoad.xml', TEXT) &&
-					!Paths.fileExists('images/$imageToLoad.json', TEXT) && !Paths.fileExists('images/$imageToLoad.txt', TEXT))
+				if(_makeNewSprite == 'animatedSprite' && !PathsUtil.fileExists('images/$imageToLoad.xml', TEXT) &&
+					!PathsUtil.fileExists('images/$imageToLoad.json', TEXT) && !PathsUtil.fileExists('images/$imageToLoad.txt', TEXT))
 				{
 					showOutput('No Animation file found with the same name of the image!', true);
 					_makeNewSprite = null;
@@ -1722,7 +1722,7 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 
 			createPopup.visible = createPopup.active = false;
 			#if MODS_ALLOWED
-			var modFolder:String = (Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0) ? Paths.mods('${Mods.currentModDirectory}/images/') : Paths.mods('images/');
+			var modFolder:String = (Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0) ? PathsUtil.mods('${Mods.currentModDirectory}/images/') : PathsUtil.mods('images/');
 			openSubState(new BasePrompt(480, 160, 'This file is not inside Psych Engine.', function(state:BasePrompt)
 			{
 				var txt:FlxText = new FlxText(0, state.bg.y + 60, 460, 'Copy to: "$modFolder"?', 11);
@@ -1873,9 +1873,9 @@ class StageEditorMetaSprite
 			switch(type)
 			{
 				case 'sprite':
-					sprite.loadGraphic(Paths.image(v));
+					sprite.loadGraphic(PathsUtil.image(v));
 				case 'animatedSprite':
-					sprite.frames = Paths.getAtlas(v);
+					sprite.frames = PathsUtil.getAtlas(v);
 			}
 		}
 		catch (e:Dynamic) {}

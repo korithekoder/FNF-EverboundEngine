@@ -67,8 +67,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 	override function create()
 	{
-		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
+		PathsUtil.clearStoredMemory();
+		PathsUtil.clearUnusedMemory();
 
 		FlxG.sound.music.stop();
 		camEditor = initPsychCamera();
@@ -82,13 +82,13 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		silhouettes = new FlxSpriteGroup();
 		add(silhouettes);
 
-		var dad:FlxSprite = new FlxSprite(dadPosition.x, dadPosition.y).loadGraphic(Paths.image('editors/silhouetteDad'));
+		var dad:FlxSprite = new FlxSprite(dadPosition.x, dadPosition.y).loadGraphic(PathsUtil.image('editors/silhouetteDad'));
 		dad.antialiasing = ClientPrefs.data.antialiasing;
 		dad.active = false;
 		dad.offset.set(-4, 1);
 		silhouettes.add(dad);
 
-		var boyfriend:FlxSprite = new FlxSprite(bfPosition.x, bfPosition.y + 350).loadGraphic(Paths.image('editors/silhouetteBF'));
+		var boyfriend:FlxSprite = new FlxSprite(bfPosition.x, bfPosition.y + 350).loadGraphic(PathsUtil.image('editors/silhouetteBF'));
 		boyfriend.antialiasing = ClientPrefs.data.antialiasing;
 		boyfriend.active = false;
 		boyfriend.offset.set(-6, 2);
@@ -161,7 +161,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		updateHealthBar();
 		character.finishAnimation();
 
-		if(ClientPrefs.data.cacheOnGPU) Paths.clearUnusedMemory();
+		if(ClientPrefs.data.cacheOnGPU) PathsUtil.clearUnusedMemory();
 
 		super.create();
 	}
@@ -296,7 +296,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 					}
 
 					if(animateGhost == null || animateGhostImage != character.imageFile)
-						Paths.loadAnimateAtlas(animateGhost, character.imageFile);
+						PathsUtil.loadAnimateAtlas(animateGhost, character.imageFile);
 					
 					if(myAnim.indices != null && myAnim.indices.length > 0)
 						animateGhost.anim.addBySymbolIndices('anim', myAnim.name, myAnim.indices, 0, false);
@@ -437,7 +437,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			if(intended == null || intended.length < 1) return;
 
 			var characterPath:String = 'characters/$intended.json';
-			var path:String = Paths.getPath(characterPath, TEXT, null, true);
+			var path:String = PathsUtil.getPath(characterPath, TEXT, null, true);
 			#if MODS_ALLOWED
 			if (FileSystem.exists(path))
 			#else
@@ -454,7 +454,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			else
 			{
 				reloadCharacterDropDown();
-				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 			}
 		});
 		reloadCharacterDropDown();
@@ -799,13 +799,13 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		character.color = FlxColor.WHITE;
 		character.alpha = 1;
 
-		if(Paths.fileExists('images/' + character.imageFile + '/Animation.json', TEXT))
+		if(PathsUtil.fileExists('images/' + character.imageFile + '/Animation.json', TEXT))
 		{
 			character.atlas = new FlxAnimate();
 			character.atlas.showPivot = false;
 			try
 			{
-				Paths.loadAnimateAtlas(character.atlas, character.imageFile);
+				PathsUtil.loadAnimateAtlas(character.atlas, character.imageFile);
 			}
 			catch(e:Dynamic)
 			{
@@ -815,7 +815,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		}
 		else
 		{
-			character.frames = Paths.getMultiAtlas(character.imageFile.split(','));
+			character.frames = PathsUtil.getMultiAtlas(character.imageFile.split(','));
 		}
 
 		for (anim in anims) {
@@ -1055,7 +1055,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 				if(!unsavedProgress)
 				{
 					MusicBeatState.switchState(new states.editors.MasterEditorMenu());
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
+					FlxG.sound.playMusic(PathsUtil.music('freakyMenu'));
 				}
 				else openSubState(new ExitConfirmationPrompt());
 			}
@@ -1071,8 +1071,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 	final assetFolder = 'week1';  //load from assets/week1/
 	inline function loadBG()
 	{
-		var lastLoaded = Paths.currentLevel;
-		Paths.currentLevel = assetFolder;
+		var lastLoaded = PathsUtil.currentLevel;
+		PathsUtil.currentLevel = assetFolder;
 
 		/////////////
 		// bg data //
@@ -1093,7 +1093,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		bfPosition.set(770, 100);
 		/////////////
 
-		Paths.currentLevel = lastLoaded;
+		PathsUtil.currentLevel = lastLoaded;
 	}
 
 	inline function updatePointerPos(?snap:Bool = true)
@@ -1220,7 +1220,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 	var characterList:Array<String> = [];
 	function reloadCharacterDropDown() {
 		characterList = Mods.mergeAllTextsNamed('data/characterList.txt');
-		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'characters/');
+		var foldersToCheck:Array<String> = Mods.directoriesWithFile(PathsUtil.getSharedPath(), 'characters/');
 		for (folder in foldersToCheck)
 			for (file in FileSystem.readDirectory(folder))
 				if(file.toLowerCase().endsWith('.json'))

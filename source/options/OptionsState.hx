@@ -1,7 +1,7 @@
 package options;
 
 import states.MainMenuState;
-import backend.StageData;
+import backend.data.StageData;
 
 class OptionsState extends MusicBeatState
 {
@@ -48,7 +48,7 @@ class OptionsState extends MusicBeatState
 		DiscordClient.changePresence("Options Menu", null);
 		#end
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		var bg:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image('menuDesat'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		bg.color = 0xFFea71fd;
 		bg.updateHitbox();
@@ -97,7 +97,7 @@ class OptionsState extends MusicBeatState
 
 		if (controls.BACK)
 		{
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 			if(onPlayState)
 			{
 				StageData.loadDirectory(PlayState.SONG);
@@ -126,7 +126,7 @@ class OptionsState extends MusicBeatState
 				selectorRight.y = item.y;
 			}
 		}
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'));
 	}
 
 	override function destroy()

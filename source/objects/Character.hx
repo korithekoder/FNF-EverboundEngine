@@ -9,7 +9,7 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import haxe.Json;
 
-import backend.Song;
+import backend.data.Song;
 import states.stages.objects.TankmenBG;
 
 typedef CharacterFile = {
@@ -109,14 +109,14 @@ class Character extends FlxSprite
 		curCharacter = character;
 		var characterPath:String = 'characters/$character.json';
 
-		var path:String = Paths.getPath(characterPath, TEXT);
+		var path:String = PathsUtil.getPath(characterPath, TEXT);
 		#if MODS_ALLOWED
 		if (!FileSystem.exists(path))
 		#else
 		if (!Assets.exists(path))
 		#end
 		{
-			path = Paths.getSharedPath('characters/' + DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash
+			path = PathsUtil.getSharedPath('characters/' + DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash
 			missingCharacter = true;
 			missingText = new FlxText(0, 0, 300, 'ERROR:\n$character.json', 16);
 			missingText.alignment = CENTER;
@@ -146,7 +146,7 @@ class Character extends FlxSprite
 		isAnimateAtlas = false;
 
 		#if flxanimate
-		var animToFind:String = Paths.getPath('images/' + json.image + '/Animation.json', TEXT);
+		var animToFind:String = PathsUtil.getPath('images/' + json.image + '/Animation.json', TEXT);
 		if (#if MODS_ALLOWED FileSystem.exists(animToFind) || #end Assets.exists(animToFind))
 			isAnimateAtlas = true;
 		#end
@@ -156,7 +156,7 @@ class Character extends FlxSprite
 
 		if(!isAnimateAtlas)
 		{
-			frames = Paths.getMultiAtlas(json.image.split(','));
+			frames = PathsUtil.getMultiAtlas(json.image.split(','));
 		}
 		#if flxanimate
 		else
@@ -165,7 +165,7 @@ class Character extends FlxSprite
 			atlas.showPivot = false;
 			try
 			{
-				Paths.loadAnimateAtlas(atlas, json.image);
+				PathsUtil.loadAnimateAtlas(atlas, json.image);
 			}
 			catch(e:haxe.Exception)
 			{
@@ -413,7 +413,7 @@ class Character extends FlxSprite
 	{
 		try
 		{
-			var songData:SwagSong = Song.getChart('picospeaker', Paths.formatToSongPath(Song.loadedSongName));
+			var songData:SongData = Song.getChart('picospeaker', PathsUtil.formatToSongPath(Song.loadedSongName));
 			if(songData != null)
 				for (section in songData.notes)
 					for (songNotes in section.sectionNotes)

@@ -1,11 +1,11 @@
-package backend;
+package backend.data;
 
 import haxe.Json;
 import lime.utils.Assets;
 
 import objects.Note;
 
-typedef SwagSong =
+typedef SongData =
 {
 	var song:String;
 	var notes:Array<SwagSection>;
@@ -121,7 +121,7 @@ class Song
 
 	public static var chartPath:String;
 	public static var loadedSongName:String;
-	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
+	public static function loadFromJson(jsonInput:String, ?folder:String):SongData
 	{
 		if(folder == null) folder = jsonInput;
 		PlayState.SONG = getChart(jsonInput, folder);
@@ -132,14 +132,14 @@ class Song
 	}
 
 	static var _lastPath:String;
-	public static function getChart(jsonInput:String, ?folder:String):SwagSong
+	public static function getChart(jsonInput:String, ?folder:String):SongData
 	{
 		if(folder == null) folder = jsonInput;
 		var rawData:String = null;
 		
-		var formattedFolder:String = Paths.formatToSongPath(folder);
-		var formattedSong:String = Paths.formatToSongPath(jsonInput);
-		_lastPath = Paths.json('$formattedFolder/$formattedSong');
+		var formattedFolder:String = PathsUtil.formatToSongPath(folder);
+		var formattedSong:String = PathsUtil.formatToSongPath(jsonInput);
+		_lastPath = PathsUtil.json('$formattedFolder/$formattedSong');
 
 		#if MODS_ALLOWED
 		if(FileSystem.exists(_lastPath))
@@ -151,12 +151,12 @@ class Song
 		return rawData != null ? parseJSON(rawData, jsonInput) : null;
 	}
 
-	public static function parseJSON(rawData:String, ?nameForError:String = null, ?convertTo:String = 'psych_v1'):SwagSong
+	public static function parseJSON(rawData:String, ?nameForError:String = null, ?convertTo:String = 'psych_v1'):SongData
 	{
-		var songJson:SwagSong = cast Json.parse(rawData);
+		var songJson:SongData = cast Json.parse(rawData);
 		if(Reflect.hasField(songJson, 'song'))
 		{
-			var subSong:SwagSong = Reflect.field(songJson, 'song');
+			var subSong:SongData = Reflect.field(songJson, 'song');
 			if(subSong != null && Type.typeof(subSong) == TObject)
 				songJson = subSong;
 		}

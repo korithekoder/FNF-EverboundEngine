@@ -70,15 +70,15 @@ class NoteSplash extends FlxSprite
 		}
 
 		texture = splash;
-		frames = Paths.getSparrowAtlas(texture);
+		frames = PathsUtil.getSparrowAtlas(texture);
 		if (frames == null)
 		{
 			texture = defaultNoteSplash + getSplashSkinPostfix();
-			frames = Paths.getSparrowAtlas(texture);
+			frames = PathsUtil.getSparrowAtlas(texture);
 			if (frames == null)
 			{
 				texture = defaultNoteSplash;
-				frames = Paths.getSparrowAtlas(texture);
+				frames = PathsUtil.getSparrowAtlas(texture);
 			}
 		}
 
@@ -93,9 +93,9 @@ class NoteSplash extends FlxSprite
 			}
 			return;
 		}
-		else if (Paths.fileExists('$path.json', TEXT))
+		else if (PathsUtil.fileExists('$path.json', TEXT))
 		{
-			var config:Dynamic = haxe.Json.parse(Paths.getTextFromFile('$path.json'));
+			var config:Dynamic = haxe.Json.parse(PathsUtil.getTextFromFile('$path.json'));
 			if (config != null)
 			{
 				var tempConfig:NoteSplashConfig = {
@@ -125,9 +125,9 @@ class NoteSplash extends FlxSprite
 		var anim:String = 'note splash';
 		var fps:Array<Null<Int>> = [22, 26];
 		var offsets:Array<Array<Float>> = [[0, 0]];
-		if (Paths.fileExists('$path.txt', TEXT)) // Backwards compatibility with 0.7 splash txts
+		if (PathsUtil.fileExists('$path.txt', TEXT)) // Backwards compatibility with 0.7 splash txts
 		{
-			var configFile:Array<String> = CoolUtil.listFromString(Paths.getTextFromFile('$path.txt'));
+			var configFile:Array<String> = CoolUtil.listFromString(PathsUtil.getTextFromFile('$path.txt'));
 			if (configFile.length > 0)
 			{
 				anim = configFile[0];

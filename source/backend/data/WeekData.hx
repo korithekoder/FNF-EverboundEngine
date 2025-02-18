@@ -1,4 +1,4 @@
-package backend;
+package backend.data;
 
 import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
@@ -76,17 +76,17 @@ class WeekData {
 		weeksList = [];
 		weeksLoaded.clear();
 		#if MODS_ALLOWED
-		var directories:Array<String> = [Paths.mods(), Paths.getSharedPath()];
+		var directories:Array<String> = [PathsUtil.mods(), PathsUtil.getSharedPath()];
 		var originalLength:Int = directories.length;
 
 		for (mod in Mods.parseList().enabled)
-			directories.push(Paths.mods(mod + '/'));
+			directories.push(PathsUtil.mods(mod + '/'));
 		#else
-		var directories:Array<String> = [Paths.getSharedPath()];
+		var directories:Array<String> = [PathsUtil.getSharedPath()];
 		var originalLength:Int = directories.length;
 		#end
 
-		var sexList:Array<String> = CoolUtil.coolTextFile(Paths.getSharedPath('weeks/weekList.txt'));
+		var sexList:Array<String> = CoolUtil.coolTextFile(PathsUtil.getSharedPath('weeks/weekList.txt'));
 		for (i in 0...sexList.length) {
 			for (j in 0...directories.length) {
 				var fileToCheck:String = directories[j] + 'weeks/' + sexList[i] + '.json';
@@ -97,7 +97,7 @@ class WeekData {
 
 						#if MODS_ALLOWED
 						if(j >= originalLength) {
-							weekFile.folder = directories[j].substring(Paths.mods().length, directories[j].length-1);
+							weekFile.folder = directories[j].substring(PathsUtil.mods().length, directories[j].length-1);
 						}
 						#end
 
@@ -148,7 +148,7 @@ class WeekData {
 				if(i >= originalLength)
 				{
 					#if MODS_ALLOWED
-					weekFile.folder = directory.substring(Paths.mods().length, directory.length-1);
+					weekFile.folder = directory.substring(PathsUtil.mods().length, directory.length-1);
 					#end
 				}
 				if((PlayState.isStoryMode && !weekFile.hideStoryMode) || (!PlayState.isStoryMode && !weekFile.hideFreeplay))

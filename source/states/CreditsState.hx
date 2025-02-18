@@ -25,7 +25,7 @@ class CreditsState extends MusicBeatState
 		#end
 
 		persistentUpdate = true;
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg = new FlxSprite().loadGraphic(PathsUtil.image('menuDesat'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		add(bg);
 		bg.screenCenter();
@@ -91,8 +91,8 @@ class CreditsState extends MusicBeatState
 				if(credit[1] != null && credit[1].length > 0)
 				{
 					var fileName = 'credits/' + credit[1];
-					if (Paths.fileExists('images/$fileName.png', IMAGE)) str = fileName;
-					else if (Paths.fileExists('images/$fileName-pixel.png', IMAGE)) str = fileName + '-pixel';
+					if (PathsUtil.fileExists('images/$fileName.png', IMAGE)) str = fileName;
+					else if (PathsUtil.fileExists('images/$fileName-pixel.png', IMAGE)) str = fileName + '-pixel';
 				}
 
 				var icon:AttachedSprite = new AttachedSprite(str);
@@ -119,7 +119,7 @@ class CreditsState extends MusicBeatState
 		add(descBox);
 
 		descText = new FlxText(50, FlxG.height + offsetThing - 25, 1180, "", 32);
-		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER/*, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK*/);
+		descText.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER/*, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK*/);
 		descText.scrollFactor.set();
 		//descText.borderSize = 2.4;
 		descBox.sprTracker = descText;
@@ -179,7 +179,7 @@ class CreditsState extends MusicBeatState
 			}
 			if (controls.BACK)
 			{
-				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 				MusicBeatState.switchState(new MainMenuState());
 				quitting = true;
 			}
@@ -208,7 +208,7 @@ class CreditsState extends MusicBeatState
 	var moveTween:FlxTween = null;
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.4);
 		do
 		{
 			curSelected = FlxMath.wrap(curSelected + change, 0, creditsStuff.length - 1);
@@ -253,11 +253,11 @@ class CreditsState extends MusicBeatState
 	#if MODS_ALLOWED
 	function pushModCreditsToList(folder:String)
 	{
-		var creditsFile:String = Paths.mods(folder + '/data/credits.txt');
+		var creditsFile:String = PathsUtil.mods(folder + '/data/credits.txt');
 		
 		#if TRANSLATIONS_ALLOWED
 		//trace('/data/credits-${ClientPrefs.data.language}.txt');
-		var translatedCredits:String = Paths.mods(folder + '/data/credits-${ClientPrefs.data.language}.txt');
+		var translatedCredits:String = PathsUtil.mods(folder + '/data/credits-${ClientPrefs.data.language}.txt');
 		#end
 
 		if (#if TRANSLATIONS_ALLOWED (FileSystem.exists(translatedCredits) && (creditsFile = translatedCredits) == translatedCredits) || #end FileSystem.exists(creditsFile))

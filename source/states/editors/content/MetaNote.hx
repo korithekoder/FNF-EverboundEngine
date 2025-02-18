@@ -145,12 +145,12 @@ class EventMetaNote extends MetaNote
 		events = eventData[1];
 		//trace('events: $events');
 		
-		loadGraphic(Paths.image('editors/eventIcon'));
+		loadGraphic(PathsUtil.image('editors/eventIcon'));
 		setGraphicSize(ChartingState.GRID_SIZE);
 		updateHitbox();
 
 		eventText = new FlxText(0, 0, 400, '', 12);
-		eventText.setFormat(Paths.font('vcr.ttf'), 12, FlxColor.WHITE, RIGHT);
+		eventText.setFormat(PathsUtil.font('vcr.ttf'), 12, FlxColor.WHITE, RIGHT);
 		eventText.scrollFactor.x = 0;
 		updateEventText();
 	}

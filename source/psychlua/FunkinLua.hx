@@ -2,10 +2,10 @@ package psychlua;
 
 #if LUA_ALLOWED
 
-import backend.WeekData;
-import backend.Highscore;
-import backend.Song;
-import backend.Constants;
+import backend.data.WeekData;
+import backend.gameplay.Highscore;
+import backend.data.Song;
+import backend.data.Constants;
 
 import flixel.FlxBasic;
 import flixel.FlxObject;
@@ -63,7 +63,7 @@ class FunkinLua {
 
 		var myFolder:Array<String> = this.scriptName.split('/');
 		#if MODS_ALLOWED
-		if(myFolder[0] + '/' == Paths.mods() && (Mods.currentModDirectory == myFolder[1] || Mods.getGlobalMods().contains(myFolder[1]))) //is inside mods folder
+		if(myFolder[0] + '/' == PathsUtil.mods() && (Mods.currentModDirectory == myFolder[1] || Mods.getGlobalMods().contains(myFolder[1]))) //is inside mods folder
 			this.modFolder = myFolder[1];
 		#end
 
@@ -86,9 +86,9 @@ class FunkinLua {
 		set('stepCrochet', Conductor.stepCrochet);
 		set('songLength', FlxG.sound.music.length);
 		set('songName', PlayState.SONG.song);
-		set('songPath', Paths.formatToSongPath(PlayState.SONG.song));
+		set('songPath', PathsUtil.formatToSongPath(PlayState.SONG.song));
 		set('loadedSongName', Song.loadedSongName);
-		set('loadedSongPath', Paths.formatToSongPath(Song.loadedSongName));
+		set('loadedSongPath', PathsUtil.formatToSongPath(Song.loadedSongName));
 		set('chartPath', Song.chartPath);
 		set('startedCountdown', false);
 		set('curStage', PlayState.SONG.stage);
@@ -398,7 +398,7 @@ class FunkinLua {
 
 			if(spr != null && image != null && image.length > 0)
 			{
-				spr.loadGraphic(Paths.image(image), animated, gridX, gridY);
+				spr.loadGraphic(PathsUtil.image(image), animated, gridX, gridY);
 			}
 		});
 		Lua_helper.add_callback(lua, "loadFrames", function(variable:String, image:String, spriteType:String = 'auto') {
@@ -422,7 +422,7 @@ class FunkinLua {
 
 			if(spr != null && images != null && images.length > 0)
 			{
-				spr.frames = Paths.getMultiAtlas(images);
+				spr.frames = PathsUtil.getMultiAtlas(images);
 			}
 		});
 
@@ -704,13 +704,13 @@ class FunkinLua {
 			game.addCharacterToList(name, charType);
 		});
 		Lua_helper.add_callback(lua, "precacheImage", function(name:String, ?allowGPU:Bool = true) {
-			Paths.image(name, allowGPU);
+			PathsUtil.image(name, allowGPU);
 		});
 		Lua_helper.add_callback(lua, "precacheSound", function(name:String) {
-			Paths.sound(name);
+			PathsUtil.sound(name);
 		});
 		Lua_helper.add_callback(lua, "precacheMusic", function(name:String) {
-			Paths.music(name);
+			PathsUtil.music(name);
 		});
 
 		// others
@@ -749,7 +749,7 @@ class FunkinLua {
 
 			#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			FlxG.sound.playMusic(PathsUtil.music('freakyMenu'));
 			PlayState.changedDifficulty = false;
 			PlayState.chartingMode = false;
 			game.transitioning = true;
@@ -931,7 +931,7 @@ class FunkinLua {
 			var leSprite:ModchartSprite = new ModchartSprite(x, y);
 			if(image != null && image.length > 0)
 			{
-				leSprite.loadGraphic(Paths.image(image));
+				leSprite.loadGraphic(PathsUtil.image(image));
 			}
 			MusicBeatState.getVariables().set(tag, leSprite);
 			leSprite.active = true;
@@ -1232,16 +1232,16 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "startDialogue", function(dialogueFile:String, ?music:String = null) {
 			var path:String;
-			var songPath:String = Paths.formatToSongPath(Song.loadedSongName);
+			var songPath:String = PathsUtil.formatToSongPath(Song.loadedSongName);
 			#if TRANSLATIONS_ALLOWED
-			path = Paths.getPath('data/$songPath/${dialogueFile}_${ClientPrefs.data.language}.json', TEXT);
+			path = PathsUtil.getPath('data/$songPath/${dialogueFile}_${ClientPrefs.data.language}.json', TEXT);
 			#if MODS_ALLOWED
 			if(!FileSystem.exists(path))
 			#else
 			if(!Assets.exists(path, TEXT))
 			#end
 			#end
-				path = Paths.getPath('data/$songPath/$dialogueFile.json', TEXT);
+				path = PathsUtil.getPath('data/$songPath/$dialogueFile.json', TEXT);
 
 			luaTrace('startDialogue: Trying to load dialogue: ' + path);
 
@@ -1272,7 +1272,7 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "startVideo", function(videoFile:String, ?canSkip:Bool = true, ?forMidSong:Bool = false, ?shouldLoop:Bool = false, ?playOnLoad:Bool = true) {
 			#if VIDEOS_ALLOWED
-			if(FileSystem.exists(Paths.video(videoFile)))
+			if(FileSystem.exists(PathsUtil.video(videoFile)))
 			{
 				if(game.videoCutscene != null)
 				{
@@ -1303,7 +1303,7 @@ class FunkinLua {
 		});
 
 		Lua_helper.add_callback(lua, "playMusic", function(sound:String, ?volume:Float = 1, ?loop:Bool = false) {
-			FlxG.sound.playMusic(Paths.music(sound), volume, loop);
+			FlxG.sound.playMusic(PathsUtil.music(sound), volume, loop);
 		});
 		Lua_helper.add_callback(lua, "playSound", function(sound:String, ?volume:Float = 1, ?tag:String = null, ?loop:Bool = false) {
 			if(tag != null && tag.length > 0)
@@ -1318,14 +1318,14 @@ class FunkinLua {
 					oldSnd.destroy();
 				}
 
-				variables.set(tag, FlxG.sound.play(Paths.sound(sound), volume, loop, null, true, function()
+				variables.set(tag, FlxG.sound.play(PathsUtil.sound(sound), volume, loop, null, true, function()
 				{
 					if(!loop) variables.remove(tag);
 					if(game != null) game.callOnLuas('onSoundFinished', [originalTag]);
 				}));
 				return tag;
 			}
-			FlxG.sound.play(Paths.sound(sound), volume);
+			FlxG.sound.play(PathsUtil.sound(sound), volume);
 			return null;
 		});
 		Lua_helper.add_callback(lua, "stopSound", function(tag:String) {
@@ -1746,7 +1746,7 @@ class FunkinLua {
 	function findScript(scriptFile:String, ext:String = '.lua')
 	{
 		if(!scriptFile.endsWith(ext)) scriptFile += ext;
-		var path:String = Paths.getPath(scriptFile, TEXT);
+		var path:String = PathsUtil.getPath(scriptFile, TEXT);
 		#if MODS_ALLOWED
 		if(FileSystem.exists(path))
 		#else
@@ -1809,12 +1809,12 @@ class FunkinLua {
 			}
 		}
 
-		var foldersToCheck:Array<String> = [Paths.mods('shaders/')];
+		var foldersToCheck:Array<String> = [PathsUtil.mods('shaders/')];
 		if(Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0)
-			foldersToCheck.insert(0, Paths.mods(Mods.currentModDirectory + '/shaders/'));
+			foldersToCheck.insert(0, PathsUtil.mods(Mods.currentModDirectory + '/shaders/'));
 
 		for(mod in Mods.getGlobalMods())
-			foldersToCheck.insert(0, Paths.mods(mod + '/shaders/'));
+			foldersToCheck.insert(0, PathsUtil.mods(mod + '/shaders/'));
 
 		for (folder in foldersToCheck)
 		{

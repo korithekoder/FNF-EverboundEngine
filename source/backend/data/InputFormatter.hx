@@ -1,4 +1,4 @@
-package backend;
+package backend.data;
 
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepad;
@@ -41,33 +41,33 @@ class InputFormatter {
 			case NINE:
 				return "9";
 			case NUMPADZERO:
-				return "#0";
+				return "NmPd 0";
 			case NUMPADONE:
-				return "#1";
+				return "NmPd 1";
 			case NUMPADTWO:
-				return "#2";
+				return "NmPd 2";
 			case NUMPADTHREE:
-				return "#3";
+				return "NmPd 3";
 			case NUMPADFOUR:
-				return "#4";
+				return "NmPd 4";
 			case NUMPADFIVE:
-				return "#5";
+				return "NmPd 5";
 			case NUMPADSIX:
-				return "#6";
+				return "NmPd 6";
 			case NUMPADSEVEN:
-				return "#7";
+				return "NmPd 7";
 			case NUMPADEIGHT:
-				return "#8";
+				return "NmPd 8";
 			case NUMPADNINE:
-				return "#9";
+				return "NmPd 9";
 			case NUMPADMULTIPLY:
-				return "#*";
+				return "NmPd *";
 			case NUMPADPLUS:
-				return "#+";
+				return "NmPd +";
 			case NUMPADMINUS:
-				return "#-";
+				return "NmPd -";
 			case NUMPADPERIOD:
-				return "#.";
+				return "NmPd .";
 			case SEMICOLON:
 				return ";";
 			case COMMA:

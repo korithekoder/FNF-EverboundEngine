@@ -49,14 +49,14 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		add(grpWeekCharacters);
 
 		txtOffsets = new FlxText(20, 10, 0, "[0, 0]", 32);
-		txtOffsets.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
+		txtOffsets.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
 		txtOffsets.alpha = 0.7;
 		add(txtOffsets);
 
 		var tipText:FlxText = new FlxText(0, 540, FlxG.width,
 			"Arrow Keys - Change Offset (Hold shift for 10x speed)
 			\nSpace - Play \"Start Press\" animation (Boyfriend Character Type)", 16);
-		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
+		tipText.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
 		tipText.scrollFactor.set();
 		add(tipText);
 
@@ -168,7 +168,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		var char:MenuCharacter = grpWeekCharacters.members[characterTypeRadio.checked];
 
 		char.alpha = 1;
-		char.frames = Paths.getSparrowAtlas('menucharacters/' + characterFile.image);
+		char.frames = PathsUtil.getSparrowAtlas('menucharacters/' + characterFile.image);
 		char.animation.addByPrefix('idle', characterFile.idle_anim, 24);
 		if(characterTypeRadio.checked == 1) char.animation.addByPrefix('confirm', characterFile.confirm_anim, 24, false);
 		char.flipX = (characterFile.flipX == true);
@@ -216,7 +216,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 				if(!unsavedProgress)
 				{
 					MusicBeatState.switchState(new states.editors.MasterEditorMenu());
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
+					FlxG.sound.playMusic(PathsUtil.music('freakyMenu'));
 				}
 				else openSubState(new ExitConfirmationPrompt());
 			}

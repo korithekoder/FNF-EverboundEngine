@@ -1,4 +1,4 @@
-package backend;
+package backend.config;
 
 import objects.Note;
 
@@ -17,7 +17,7 @@ class NoteTypesConfig
 	{
 		if(noteTypesData.exists(name)) return noteTypesData.get(name);
 
-		var str:String = Paths.getTextFromFile('custom_notetypes/$name.txt');
+		var str:String = PathsUtil.getTextFromFile('custom_notetypes/$name.txt');
 		if(str == null || !str.contains(':') || !str.contains('=')) noteTypesData.set(name, null);
 
 		var parsed:Array<NoteTypeProperty> = [];

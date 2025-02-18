@@ -30,7 +30,7 @@ class SchoolEvil extends BaseStage
 		add(bg);
 		setDefaultGF('gf-pixel');
 
-		FlxG.sound.playMusic(Paths.music('LunchboxScary'), 0);
+		FlxG.sound.playMusic(PathsUtil.music('LunchboxScary'), 0);
 		FlxG.sound.music.fadeIn(1, 0, 0.8);
 		if(isStoryMode && !seenCutscene)
 		{
@@ -84,14 +84,14 @@ class SchoolEvil extends BaseStage
 	var doof:DialogueBox = null;
 	function initDoof()
 	{
-		var file:String = Paths.txt('$songName/${songName}Dialogue_${ClientPrefs.data.language}'); //Checks for vanilla/Senpai dialogue
+		var file:String = PathsUtil.txt('$songName/${songName}Dialogue_${ClientPrefs.data.language}'); //Checks for vanilla/Senpai dialogue
 		#if MODS_ALLOWED
 		if (!FileSystem.exists(file))
 		#else
 		if (!OpenFlAssets.exists(file))
 		#end
 		{
-			file = Paths.txt('$songName/${songName}Dialogue');
+			file = PathsUtil.txt('$songName/${songName}Dialogue');
 		}
 
 		#if MODS_ALLOWED
@@ -120,7 +120,7 @@ class SchoolEvil extends BaseStage
 		add(red);
 
 		var senpaiEvil:FlxSprite = new FlxSprite();
-		senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy');
+		senpaiEvil.frames = PathsUtil.getSparrowAtlas('weeb/senpaiCrazy');
 		senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
 		senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * 6));
 		senpaiEvil.scrollFactor.set();
@@ -145,7 +145,7 @@ class SchoolEvil extends BaseStage
 					else
 					{
 						senpaiEvil.animation.play('idle');
-						FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function()
+						FlxG.sound.play(PathsUtil.sound('Senpai_Dies'), 1, false, null, true, function()
 						{
 							remove(senpaiEvil);
 							senpaiEvil.destroy();

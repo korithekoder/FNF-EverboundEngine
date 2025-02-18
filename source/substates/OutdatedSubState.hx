@@ -33,7 +33,7 @@ class OutdatedSubState extends MusicBeatSubstate
 			-----------------------------------------------\n
 			Thank you for using the Engine!',
 			32);
-		warnText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
+		warnText.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
 		warnText.scrollFactor.set();
 		warnText.screenCenter(Y);
 		warnText.alpha = 0.0;
@@ -55,7 +55,7 @@ class OutdatedSubState extends MusicBeatSubstate
 			}
 			if(leftState)
 			{
-				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 				FlxTween.tween(bg, { alpha: 0.0 }, 0.9, { ease: FlxEase.sineOut });
 				FlxTween.tween(warnText, {alpha: 0}, 1, {
 					ease: FlxEase.sineOut,

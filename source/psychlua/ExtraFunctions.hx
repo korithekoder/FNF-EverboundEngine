@@ -152,12 +152,12 @@ class ExtraFunctions
 			#if MODS_ALLOWED
 			if(absolute) return FileSystem.exists(filename);
 
-			return FileSystem.exists(Paths.getPath(filename, TEXT));
+			return FileSystem.exists(PathsUtil.getPath(filename, TEXT));
 
 			#else
 			if(absolute) return Assets.exists(filename, TEXT);
 
-			return Assets.exists(Paths.getPath(filename, TEXT));
+			return Assets.exists(PathsUtil.getPath(filename, TEXT));
 			#end
 		});
 		Lua_helper.add_callback(lua, "saveFile", function(path:String, content:String, ?absolute:Bool = false)
@@ -165,7 +165,7 @@ class ExtraFunctions
 			try {
 				#if MODS_ALLOWED
 				if(!absolute)
-					File.saveContent(Paths.mods(path), content);
+					File.saveContent(PathsUtil.mods(path), content);
 				else
 				#end
 					File.saveContent(path, content);
@@ -180,7 +180,7 @@ class ExtraFunctions
 		{
 			try {
 				var lePath:String = path;
-				if(!absolute) lePath = Paths.getPath(path, TEXT, !ignoreModFolders);
+				if(!absolute) lePath = PathsUtil.getPath(path, TEXT, !ignoreModFolders);
 				if(FileSystem.exists(lePath))
 				{
 					FileSystem.deleteFile(lePath);
@@ -192,7 +192,7 @@ class ExtraFunctions
 			return false;
 		});
 		Lua_helper.add_callback(lua, "getTextFromFile", function(path:String, ?ignoreModFolders:Bool = false) {
-			return Paths.getTextFromFile(path, ignoreModFolders);
+			return PathsUtil.getTextFromFile(path, ignoreModFolders);
 		});
 		Lua_helper.add_callback(lua, "directoryFileList", function(folder:String) {
 			var list:Array<String> = [];

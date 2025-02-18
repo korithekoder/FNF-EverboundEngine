@@ -1,6 +1,6 @@
 package states.editors;
 
-import backend.WeekData;
+import backend.data.WeekData;
 
 import openfl.utils.Assets;
 import openfl.net.FileReference;
@@ -40,10 +40,10 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 
 	override function create() {
 		txtWeekTitle = new FlxText(FlxG.width * 0.7, 10, 0, "", 32);
-		txtWeekTitle.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
+		txtWeekTitle.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 		txtWeekTitle.alpha = 0.7;
 		
-		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
+		var ui_tex = PathsUtil.getSparrowAtlas('campaign_menu_UI_assets');
 		var bgYellow:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, 0xFFF9CF51);
 		bgSprite = new FlxSprite(0, 56);
 		bgSprite.antialiasing = ClientPrefs.data.antialiasing;
@@ -66,7 +66,7 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 		add(lock);
 		
 		missingFileText = new FlxText(0, 0, FlxG.width, "");
-		missingFileText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		missingFileText.setFormat(PathsUtil.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		missingFileText.borderSize = 2;
 		missingFileText.visible = false;
 		add(missingFileText); 
@@ -83,13 +83,13 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 		add(bgSprite);
 		add(grpWeekCharacters);
 
-		var tracksSprite:FlxSprite = new FlxSprite(FlxG.width * 0.07, bgSprite.y + 435).loadGraphic(Paths.image('Menu_Tracks'));
+		var tracksSprite:FlxSprite = new FlxSprite(FlxG.width * 0.07, bgSprite.y + 435).loadGraphic(PathsUtil.image('Menu_Tracks'));
 		tracksSprite.antialiasing = ClientPrefs.data.antialiasing;
 		add(tracksSprite);
 
 		txtTracklist = new FlxText(FlxG.width * 0.05, tracksSprite.y + 60, 0, "", 32);
 		txtTracklist.alignment = CENTER;
-		txtTracklist.font = Paths.font("vcr.ttf");
+		txtTracklist.font = PathsUtil.font("vcr.ttf");
 		txtTracklist.color = 0xFFe55777;
 		add(txtTracklist);
 		add(txtWeekTitle);
@@ -288,9 +288,9 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 
 		var isMissing:Bool = true;
 		if(assetName != null && assetName.length > 0) {
-			if( #if MODS_ALLOWED FileSystem.exists(Paths.modsImages('menubackgrounds/menu_' + assetName)) || #end
-			Assets.exists(Paths.getPath('images/menubackgrounds/menu_' + assetName + '.png', IMAGE), IMAGE)) {
-				bgSprite.loadGraphic(Paths.image('menubackgrounds/menu_' + assetName));
+			if( #if MODS_ALLOWED FileSystem.exists(PathsUtil.modsImages('menubackgrounds/menu_' + assetName)) || #end
+			Assets.exists(PathsUtil.getPath('images/menubackgrounds/menu_' + assetName + '.png', IMAGE), IMAGE)) {
+				bgSprite.loadGraphic(PathsUtil.image('menubackgrounds/menu_' + assetName));
 				isMissing = false;
 			}
 		}
@@ -307,9 +307,9 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 		
 		var isMissing:Bool = true;
 		if(assetName != null && assetName.length > 0) {
-			if( #if MODS_ALLOWED FileSystem.exists(Paths.modsImages('storymenu/' + assetName)) || #end
-			Assets.exists(Paths.getPath('images/storymenu/' + assetName + '.png', IMAGE), IMAGE)) {
-				weekThing.loadGraphic(Paths.image('storymenu/' + assetName));
+			if( #if MODS_ALLOWED FileSystem.exists(PathsUtil.modsImages('storymenu/' + assetName)) || #end
+			Assets.exists(PathsUtil.getPath('images/storymenu/' + assetName + '.png', IMAGE), IMAGE)) {
+				weekThing.loadGraphic(PathsUtil.image('storymenu/' + assetName));
 				isMissing = false;
 			}
 		}
@@ -403,7 +403,7 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 				if(!unsavedProgress)
 				{
 					MusicBeatState.switchState(new MasterEditorMenu());
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
+					FlxG.sound.playMusic(PathsUtil.music('freakyMenu'));
 				}
 				else openSubState(new ExitConfirmationPrompt(function() unsavedProgress = false));
 			}
@@ -557,7 +557,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 	var curSelected = 0;
 
 	override function create() {
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg = new FlxSprite().loadGraphic(PathsUtil.image('menuDesat'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		bg.color = FlxColor.WHITE;
 		add(bg);
@@ -715,7 +715,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 	}
 
 	function changeSelection(change:Int = 0) {
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.4);
 
 		curSelected = FlxMath.wrap(curSelected + change, 0, weekFile.songs.length - 1);
 		for (num => item in grpSongs.members)
@@ -759,7 +759,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 				if(!WeekEditorState.unsavedProgress)
 				{
 					MusicBeatState.switchState(new MasterEditorMenu());
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
+					FlxG.sound.playMusic(PathsUtil.music('freakyMenu'));
 				}
 				else openSubState(new ExitConfirmationPrompt());
 			}

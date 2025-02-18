@@ -28,14 +28,14 @@ class FlashingState extends MusicBeatState
 			"Hey, watch out!\n
 			This Mod contains some flashing lights!\n
 			Do you wish to disable them?");
-		warnText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
+		warnText.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
 		warnText.screenCenter(Y);
 		texts.add(warnText);
 
 		final keys = ["Yes", "No"];
 		for (i in 0...keys.length) {
 			final button = new FlxText(0, 0, FlxG.width, keys[i]);
-			button.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
+			button.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
 			button.y = (warnText.y + warnText.height) + 24;
 			button.x += (128 * i) - 80;
 			texts.add(button);
@@ -54,7 +54,7 @@ class FlashingState extends MusicBeatState
 		}
 		var back:Bool = controls.BACK;
 		if (controls.UI_LEFT_P || controls.UI_RIGHT_P) {
-			FlxG.sound.play(Paths.sound("scrollMenu"), 0.7);
+			FlxG.sound.play(PathsUtil.sound("scrollMenu"), 0.7);
 			isYes = !isYes;
 			updateItems();
 		}
@@ -65,7 +65,7 @@ class FlashingState extends MusicBeatState
 			if(!back) {
 				ClientPrefs.data.flashing = !isYes;
 				ClientPrefs.saveSettings();
-				FlxG.sound.play(Paths.sound('confirmMenu'));
+				FlxG.sound.play(PathsUtil.sound('confirmMenu'));
 				final button = texts.members[isYes ? 1 : 2];
 				FlxFlicker.flicker(button, 1, 0.1, false, true, function(flk:FlxFlicker) {
 					new FlxTimer().start(0.5, function (tmr:FlxTimer) {
@@ -75,7 +75,7 @@ class FlashingState extends MusicBeatState
 					});
 				});
 			} else {
-				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 				FlxTween.tween(texts, {alpha: 0}, 1, {
 					onComplete: (_) -> MusicBeatState.switchState(new TitleState())
 				});

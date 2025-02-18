@@ -1,4 +1,4 @@
-package backend;
+package backend.data;
 
 /**
  * Class that holds values that do not change.

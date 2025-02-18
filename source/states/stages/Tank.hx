@@ -146,7 +146,7 @@ class Tank extends BaseStage
 
 		tankman = new FlxAnimate(dad.x + 419, dad.y + 225);
 		tankman.showPivot = false;
-		Paths.loadAnimateAtlas(tankman, 'cutscenes/tankman');
+		PathsUtil.loadAnimateAtlas(tankman, 'cutscenes/tankman');
 		tankman.antialiasing = ClientPrefs.data.antialiasing;
 		addBehindDad(tankman);
 		cutsceneHandler.push(tankman);
@@ -196,13 +196,13 @@ class Tank extends BaseStage
 		prepareCutscene();
 		cutsceneHandler.endTime = 12;
 		cutsceneHandler.music = 'DISTORTO';
-		Paths.sound('wellWellWell');
-		Paths.sound('killYou');
-		Paths.sound('bfBeep');
+		PathsUtil.sound('wellWellWell');
+		PathsUtil.sound('killYou');
+		PathsUtil.sound('bfBeep');
 
-		var wellWellWell:FlxSound = new FlxSound().loadEmbedded(Paths.sound('wellWellWell'));
+		var wellWellWell:FlxSound = new FlxSound().loadEmbedded(PathsUtil.sound('wellWellWell'));
 		FlxG.sound.list.add(wellWellWell);
-		var killYou:FlxSound = new FlxSound().loadEmbedded(Paths.sound('killYou'));
+		var killYou:FlxSound = new FlxSound().loadEmbedded(PathsUtil.sound('killYou'));
 		FlxG.sound.list.add(killYou);
 
 		tankman.anim.addBySymbol('wellWell', 'TANK TALK 1 P1', 24, false);
@@ -229,7 +229,7 @@ class Tank extends BaseStage
 		{
 			boyfriend.playAnim('singUP', true);
 			boyfriend.specialAnim = true;
-			FlxG.sound.play(Paths.sound('bfBeep'));
+			FlxG.sound.play(PathsUtil.sound('bfBeep'));
 		});
 
 		// Move camera to Tankman
@@ -249,9 +249,9 @@ class Tank extends BaseStage
 		prepareCutscene();
 		cutsceneHandler.endTime = 11.5;
 		cutsceneHandler.music = 'DISTORTO';
-		Paths.sound('tankSong2');
+		PathsUtil.sound('tankSong2');
 
-		var tightBars:FlxSound = new FlxSound().loadEmbedded(Paths.sound('tankSong2'));
+		var tightBars:FlxSound = new FlxSound().loadEmbedded(PathsUtil.sound('tankSong2'));
 		FlxG.sound.list.add(tightBars);
 
 		tankman.anim.addBySymbol('tightBars', 'TANK TALK 2', 24, false);
@@ -290,11 +290,11 @@ class Tank extends BaseStage
 		{
 			spr.y += 100;
 		});
-		Paths.sound('stressCutscene');
+		PathsUtil.sound('stressCutscene');
 
 		pico = new FlxAnimate(gf.x + 150, gf.y + 450);
 		pico.showPivot = false;
-		Paths.loadAnimateAtlas(pico, 'cutscenes/picoAppears');
+		PathsUtil.loadAnimateAtlas(pico, 'cutscenes/picoAppears');
 		pico.antialiasing = ClientPrefs.data.antialiasing;
 		pico.anim.addBySymbol('dance', 'GF Dancing at Gunpoint', 24, true);
 		pico.anim.addBySymbol('dieBitch', 'GF Time to Die sequence', 24, false);
@@ -333,14 +333,14 @@ class Tank extends BaseStage
 
 		boyfriendCutscene = new FlxSprite(boyfriend.x + 5, boyfriend.y + 20);
 		boyfriendCutscene.antialiasing = ClientPrefs.data.antialiasing;
-		boyfriendCutscene.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
+		boyfriendCutscene.frames = PathsUtil.getSparrowAtlas('characters/BOYFRIEND');
 		boyfriendCutscene.animation.addByPrefix('idle', 'BF idle dance', 24, false);
 		boyfriendCutscene.animation.play('idle', true);
 		boyfriendCutscene.animation.curAnim.finish();
 		addBehindBF(boyfriendCutscene);
 		cutsceneHandler.push(boyfriendCutscene);
 
-		var cutsceneSnd:FlxSound = new FlxSound().loadEmbedded(Paths.sound('stressCutscene'));
+		var cutsceneSnd:FlxSound = new FlxSound().loadEmbedded(PathsUtil.sound('stressCutscene'));
 		FlxG.sound.list.add(cutsceneSnd);
 
 		tankman.anim.addBySymbol('godEffingDamnIt', 'TANK TALK 3 P1 UNCUT', 24, false);

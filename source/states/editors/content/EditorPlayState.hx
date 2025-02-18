@@ -1,7 +1,7 @@
 package states.editors.content;
 
-import backend.Song;
-import backend.Rating;
+import backend.data.Song;
+import backend.gameplay.Rating;
 
 import objects.Note;
 import objects.NoteSplash;
@@ -91,10 +91,10 @@ class EditorPlayState extends MusicBeatSubstate
 
 		cachePopUpScore();
 		guitarHeroSustains = ClientPrefs.data.guitarHeroSustains;
-		if(ClientPrefs.data.hitsoundVolume > 0) Paths.sound('hitsound');
+		if(ClientPrefs.data.hitsoundVolume > 0) PathsUtil.sound('hitsound');
 
 		/* setting up Editor PlayState stuff */
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		var bg:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image('menuDesat'));
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		bg.scrollFactor.set();
 		bg.color = 0xFF101010;
@@ -121,20 +121,20 @@ class EditorPlayState extends MusicBeatSubstate
 		/***************/
 		
 		scoreTxt = new FlxText(10, FlxG.height - 50, FlxG.width - 20, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt.setFormat(PathsUtil.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
 		scoreTxt.visible = !ClientPrefs.data.hideHud;
 		add(scoreTxt);
 		
 		dataTxt = new FlxText(10, 580, FlxG.width - 20, "Section: 0", 20);
-		dataTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		dataTxt.setFormat(PathsUtil.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		dataTxt.scrollFactor.set();
 		dataTxt.borderSize = 1.25;
 		add(dataTxt);
 
 		var tipText:FlxText = new FlxText(10, FlxG.height - 24, 0, 'Press ESC to Go Back to Chart Editor', 16);
-		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		tipText.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 2;
 		tipText.scrollFactor.set();
 		add(tipText);
@@ -512,9 +512,9 @@ class EditorPlayState extends MusicBeatSubstate
 			uiFolder = PlayState.uiPrefix + "UI/";
 
 		for (rating in ratingsData)
-			Paths.image(uiFolder + rating.image + PlayState.uiPostfix);
+			PathsUtil.image(uiFolder + rating.image + PlayState.uiPostfix);
 		for (i in 0...10)
-			Paths.image(uiFolder + 'num' + i + PlayState.uiPostfix);
+			PathsUtil.image(uiFolder + 'num' + i + PlayState.uiPostfix);
 	}
 
 	private function popUpScore(note:Note = null):Void
@@ -559,7 +559,7 @@ class EditorPlayState extends MusicBeatSubstate
 			antialias = !PlayState.isPixelStage;
 		}
 
-		rating.loadGraphic(Paths.image(uiFolder + daRating.image + PlayState.uiPostfix));
+		rating.loadGraphic(PathsUtil.image(uiFolder + daRating.image + PlayState.uiPostfix));
 		rating.screenCenter();
 		rating.x = placement - 40;
 		rating.y -= 60;
@@ -571,7 +571,7 @@ class EditorPlayState extends MusicBeatSubstate
 		rating.y -= ClientPrefs.data.comboOffset[1];
 		rating.antialiasing = antialias;
 
-		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiFolder + 'combo' + PlayState.uiPostfix));
+		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image(uiFolder + 'combo' + PlayState.uiPostfix));
 		comboSpr.screenCenter();
 		comboSpr.x = placement;
 		comboSpr.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
@@ -606,7 +606,7 @@ class EditorPlayState extends MusicBeatSubstate
 		var separatedScore:String = Std.string(combo).lpad('0', 3);
 		for (i in 0...separatedScore.length)
 		{
-			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiFolder + 'num' + Std.parseInt(separatedScore.charAt(i)) + PlayState.uiPostfix));
+			var numScore:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image(uiFolder + 'num' + Std.parseInt(separatedScore.charAt(i)) + PlayState.uiPostfix));
 			numScore.screenCenter();
 			numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
 			numScore.y += 80 - ClientPrefs.data.comboOffset[3];
@@ -805,7 +805,7 @@ class EditorPlayState extends MusicBeatSubstate
 
 		note.wasGoodHit = true;
 		if (note.hitsoundVolume > 0 && !note.hitsoundDisabled)
-			FlxG.sound.play(Paths.sound(note.hitsound), note.hitsoundVolume);
+			FlxG.sound.play(PathsUtil.sound(note.hitsound), note.hitsoundVolume);
 
 		if(note.hitCausesMiss) {
 			noteMiss(note);

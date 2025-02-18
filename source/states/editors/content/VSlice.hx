@@ -1,8 +1,8 @@
 package states.editors.content;
 
-import backend.Constants;
-import backend.Song;
-import backend.Difficulty;
+import backend.data.Constants;
+import backend.data.Song;
+import backend.gameplay.Difficulty;
 
 import flixel.util.FlxSort;
 
@@ -80,7 +80,7 @@ typedef VSlicePackage =
 
 typedef PsychPackage =
 {
-	var difficulties:Map<String, SwagSong>;
+	var difficulties:Map<String, SongData>;
 	var events:PsychEventChart;
 }
 
@@ -90,7 +90,7 @@ class VSlice
 	public static final chartVersion = '2.0.0';
 	public static function convertToPsych(chart:VSliceChart, metadata:VSliceMetadata):PsychPackage
 	{
-		var songDifficulties:Map<String, SwagSong> = [];
+		var songDifficulties:Map<String, SongData> = [];
 		var timeChanges:Array<VSliceTimeChange> = cast metadata.timeChanges;
 		timeChanges.sort(sortByTime);
 		
@@ -246,7 +246,7 @@ class VSlice
 					sectionData[noteSec].sectionNotes.push(psychNote);
 			}
 
-			var swagSong:SwagSong = {
+			var swagSong:SongData = {
 				song: metadata.songName,
 				notes: sectionData,
 				events: [],
@@ -314,7 +314,7 @@ class VSlice
 		return pack;
 	}
 
-	public static function export(songData:SwagSong, ?difficultyName:String = null):VSlicePackage
+	public static function export(songData:SongData, ?difficultyName:String = null):VSlicePackage
 	{
 		var events:Array<VSliceEvent> = [];
 		if(songData.events != null && songData.events.length > 0) //Add events
@@ -395,7 +395,7 @@ class VSlice
 			var diffs:Array<String> = Difficulty.list.copy();
 			for (num => diff in diffs)
 			{
-				diffs[num] = diff = Paths.formatToSongPath(diff);
+				diffs[num] = diff = PathsUtil.formatToSongPath(diff);
 				scrollSpeed.set(diff, songData.speed);
 				notesMap.set(diff, notes);
 			}
@@ -404,7 +404,7 @@ class VSlice
 		{
 			var diff:String = Difficulty.getString(false);
 			if(diff == null) diff = Difficulty.getDefault();
-			diff = Paths.formatToSongPath(diff);
+			diff = PathsUtil.formatToSongPath(diff);
 			
 			scrollSpeed.set(diff, songData.speed);
 			notesMap.set(diff, notes);

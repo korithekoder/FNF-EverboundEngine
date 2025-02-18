@@ -1,8 +1,8 @@
-package backend;
+package backend.data;
 
 import openfl.utils.Assets;
 import haxe.Json;
-import backend.Song;
+import backend.data.Song;
 import psychlua.ModchartSprite;
 
 typedef StageFile = {
@@ -62,12 +62,12 @@ class StageData {
 	}
 
 	public static var forceNextDirectory:String = null;
-	public static function loadDirectory(SONG:SwagSong) {
+	public static function loadDirectory(SONG:SongData) {
 		var stage:String = '';
 		if(SONG.stage != null)
 			stage = SONG.stage;
 		else if(Song.loadedSongName != null)
-			stage = vanillaSongStage(Paths.formatToSongPath(Song.loadedSongName));
+			stage = vanillaSongStage(PathsUtil.formatToSongPath(Song.loadedSongName));
 		else
 			stage = 'stage';
 
@@ -78,7 +78,7 @@ class StageData {
 	public static function getStageFile(stage:String):StageFile {
 		try
 		{
-			var path:String = Paths.getPath('stages/' + stage + '.json', TEXT, null, true);
+			var path:String = PathsUtil.getPath('stages/' + stage + '.json', TEXT, null, true);
 			#if MODS_ALLOWED
 			if(FileSystem.exists(path))
 				return cast tjson.TJSON.parse(File.getContent(path));
@@ -154,9 +154,9 @@ class StageData {
 					if(data.type != 'square')
 					{
 						if(data.type == 'sprite')
-							spr.loadGraphic(Paths.image(data.image));
+							spr.loadGraphic(PathsUtil.image(data.image));
 						else
-							spr.frames = Paths.getAtlas(data.image);
+							spr.frames = PathsUtil.getAtlas(data.image);
 						
 						if(data.type == 'animatedSprite' && data.animations != null)
 						{

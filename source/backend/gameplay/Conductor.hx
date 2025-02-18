@@ -1,6 +1,6 @@
-package backend;
+package backend.gameplay;
 
-import backend.Song;
+import backend.data.Song;
 import objects.Note;
 
 typedef BPMChangeEvent =
@@ -95,7 +95,7 @@ class Conductor
 		return Math.floor(getStepRounded(time)/4);
 	}
 
-	public static function mapBPMChanges(song:SwagSong)
+	public static function mapBPMChanges(song:SongData)
 	{
 		bpmChangeMap = [];
 
@@ -123,7 +123,7 @@ class Conductor
 		trace("new BPM map BUDDY " + bpmChangeMap);
 	}
 
-	static function getSectionBeats(song:SwagSong, section:Int)
+	static function getSectionBeats(song:SongData, section:Int)
 	{
 		var val:Null<Float> = null;
 		if(song.notes[section] != null) val = song.notes[section].sectionBeats;

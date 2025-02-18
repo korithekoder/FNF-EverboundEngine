@@ -31,18 +31,18 @@ class AchievementPopup extends openfl.display.Sprite {
 		if(achievement != null) Mods.currentModDirectory = achievement.mod != null ? achievement.mod : '';
 		#end
 
-		if(Paths.fileExists('images/$image-pixel.png', IMAGE))
+		if(PathsUtil.fileExists('images/$image-pixel.png', IMAGE))
 		{
-			graphic = Paths.image('$image-pixel', false);
+			graphic = PathsUtil.image('$image-pixel', false);
 			hasAntialias = false;
 		}
-		else graphic = Paths.image(image, false);
+		else graphic = PathsUtil.image(image, false);
 
 		#if MODS_ALLOWED
 		Mods.currentModDirectory = lastMod;
 		#end
 
-		if(graphic == null) graphic = Paths.image('unknownMod', false);
+		if(graphic == null) graphic = PathsUtil.image('unknownMod', false);
 
 		var sizeX = 100;
 		var sizeY = 100;
@@ -66,7 +66,7 @@ class AchievementPopup extends openfl.display.Sprite {
 		var textY = imgY + 20;
 
 		var text:FlxText = new FlxText(0, 0, 270, 'TEST!!!', 16);
-		text.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
+		text.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
 		drawTextAt(text, name, textX, textY);
 		drawTextAt(text, desc, textX, textY + 30);
 		graphics.endFill();

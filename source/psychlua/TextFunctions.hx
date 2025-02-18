@@ -10,7 +10,7 @@ class TextFunctions
 
 			LuaUtils.destroyObject(tag);
 			var leText:FlxText = new FlxText(x, y, width, text, 16);
-			leText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			leText.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			if(PlayState.instance != null) leText.cameras = [PlayState.instance.camHUD];
 			leText.scrollFactor.set();
 			leText.borderSize = 2;
@@ -103,7 +103,7 @@ class TextFunctions
 			var obj:FlxText = split.length > 1 ? (LuaUtils.getVarInArray(LuaUtils.getPropertyLoop(split), split[split.length-1])) : LuaUtils.getObjectDirectly(split[0]);
 			if(obj != null)
 			{
-				obj.font = Paths.font(newFont);
+				obj.font = PathsUtil.font(newFont);
 				return true;
 			}
 			FunkinLua.luaTrace("setTextFont: Object " + tag + " doesn't exist!", false, false, FlxColor.RED);

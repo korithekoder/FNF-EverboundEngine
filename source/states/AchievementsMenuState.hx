@@ -22,8 +22,8 @@ class AchievementsMenuState extends MusicBeatState
 
 	override function create()
 	{
-		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
+		PathsUtil.clearStoredMemory();
+		PathsUtil.clearUnusedMemory();
 
 		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Achievements Menu", null);
@@ -40,7 +40,7 @@ class AchievementsMenuState extends MusicBeatState
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image('menuBGBlue'));
 		menuBG.antialiasing = ClientPrefs.data.antialiasing;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -60,16 +60,16 @@ class AchievementsMenuState extends MusicBeatState
 			{
 				#if MODS_ALLOWED Mods.currentModDirectory = option.mod; #end
 				var image:String = 'achievements/' + option.name;
-				if(Paths.fileExists('images/$image-pixel.png', IMAGE))
+				if(PathsUtil.fileExists('images/$image-pixel.png', IMAGE))
 				{
-					graphic = Paths.image('$image-pixel');
+					graphic = PathsUtil.image('$image-pixel');
 					hasAntialias = false;
 				}
-				else graphic = Paths.image(image);
+				else graphic = PathsUtil.image(image);
 
-				if(graphic == null) graphic = Paths.image('unknownMod');
+				if(graphic == null) graphic = PathsUtil.image('unknownMod');
 			}
-			else graphic = Paths.image('achievements/lockedachievement');
+			else graphic = PathsUtil.image('achievements/lockedachievement');
 
 			var spr:FlxSprite = new FlxSprite(0, Math.floor(grpOptions.members.length / MAX_PER_ROW) * 180).loadGraphic(graphic);
 			spr.scrollFactor.x = 0;
@@ -98,11 +98,11 @@ class AchievementsMenuState extends MusicBeatState
 		add(box);
 		
 		nameText = new FlxText(50, box.y + 10, FlxG.width - 100, "", 32);
-		nameText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
+		nameText.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
 		nameText.scrollFactor.set();
 
 		descText = new FlxText(50, nameText.y + 38, FlxG.width - 100, "", 24);
-		descText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER);
+		descText.setFormat(PathsUtil.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER);
 		descText.scrollFactor.set();
 
 		progressBar = new Bar(0, descText.y + 52);
@@ -111,7 +111,7 @@ class AchievementsMenuState extends MusicBeatState
 		progressBar.enabled = false;
 		
 		progressTxt = new FlxText(50, progressBar.y - 6, FlxG.width - 100, "", 32);
-		progressTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		progressTxt.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		progressTxt.scrollFactor.set();
 		progressTxt.borderSize = 2;
 
@@ -204,7 +204,7 @@ class AchievementsMenuState extends MusicBeatState
 		}
 
 		if (controls.BACK) {
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 			MusicBeatState.switchState(new MainMenuState());
 			goingBack = true;
 		}
@@ -214,7 +214,7 @@ class AchievementsMenuState extends MusicBeatState
 	public var barTween:FlxTween = null;
 	function _changeSelection()
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'));
 		var hasProgress = options[curSelected].maxProgress > 0;
 		nameText.text = options[curSelected].displayName;
 		descText.text = options[curSelected].description;
@@ -273,7 +273,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 		
 		var state:AchievementsMenuState = cast FlxG.state;
 		var text:FlxText = new FlxText(50, text.y + 90, FlxG.width - 100, state.options[state.curSelected].displayName, 40);
-		text.setFormat(Paths.font("vcr.ttf"), 40, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		text.setFormat(PathsUtil.font("vcr.ttf"), 40, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.scrollFactor.set();
 		text.borderSize = 2;
 		add(text);
@@ -297,7 +297,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 		if(controls.BACK)
 		{
 			close();
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 			return;
 		}
 
@@ -321,7 +321,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 				option.curProgress = 0;
 				option.name = state.nameText.text = '???';
 				if(option.maxProgress > 0) state.progressTxt.text = '0 / ' + option.maxProgress;
-				state.grpOptions.members[state.curSelected].loadGraphic(Paths.image('achievements/lockedachievement'));
+				state.grpOptions.members[state.curSelected].loadGraphic(PathsUtil.image('achievements/lockedachievement'));
 				state.grpOptions.members[state.curSelected].antialiasing = ClientPrefs.data.antialiasing;
 
 				if(state.progressBar.visible)
@@ -335,7 +335,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 				Achievements.save();
 				FlxG.save.flush();
 
-				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 			}
 			close();
 			return;
@@ -351,7 +351,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 		yesText.scale.set(scales[confirmInt], scales[confirmInt]);
 		noText.alpha = alphas[1 - confirmInt];
 		noText.scale.set(scales[1 - confirmInt], scales[1 - confirmInt]);
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'));
 	}
 }
 #end

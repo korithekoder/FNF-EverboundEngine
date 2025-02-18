@@ -7,8 +7,9 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		title = Language.getPhrase('gameplay_menu', 'Gameplay Settings');
 		rpcTitle = 'Gameplay Settings Menu'; // For Discord rich presence
 
-		var option:Option = new Option('Downscroll',
-			'If checked, notes go Down instead of Up, simple enough.',
+		var option:Option = new Option(
+			'Downscroll',
+			'When checked, notes go down instead of up, simple enough.',
 			'downScroll',
 			BOOL
 		);
@@ -16,7 +17,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 
 		var option:Option = new Option(
 			'Middlescroll',
-			'If checked, your notes get centered.',
+			'When checked, your notes get centered.',
 			'middleScroll',
 			BOOL
 		);
@@ -24,7 +25,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 
 		var option:Option = new Option(
 			'Opponent Notes',
-			'If unchecked, opponent notes get hidden.',
+			'When unchecked, opponent notes get hidden.',
 			'opponentStrums',
 			BOOL
 		);
@@ -32,24 +33,26 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 
 		var option:Option = new Option(
 			'Ghost Tapping',
-			"If checked, you won't get misses from pressing keys\nwhile there are no notes able to be hit.",
+			"When checked, you won't get misses from pressing keys\nwhile there are no notes able to be hit.",
 			'ghostTapping',
 			BOOL
 		);
 		addOption(option);
 		
+		#if !html5
 		var option:Option = new Option(
 			'Auto Pause',
-			"If checked, the game automatically pauses if the screen isn't on focus.",
+			"When checked, the game automatically pauses if the screen isn't on focus.",
 			'autoPause',
 			BOOL
 		);
 		addOption(option);
 		option.onChange = onChangeAutoPause;
+		#end
 
 		var option:Option = new Option(
 			'Disable Reset Button',
-			"If checked, pressing Reset won't do anything.",
+			"When checked, pressing Reset won't do anything.",
 			'noReset',
 			BOOL
 		);
@@ -71,7 +74,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 
 		var option:Option = new Option(
 			'Rating Offset',
-			'Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later.',
+			'Changes the position of the strumline starting from the middle.\n"0" is dead center.',
 			'ratingOffset',
 			INT
 		);
@@ -131,7 +134,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 
 		var option:Option = new Option(
 			'Sustains as One Note',
-			"If checked, Hold Notes can't be pressed if you miss,\nand count as a single Hit/Miss.\nUncheck this if you prefer the old Input System.",
+			"When checked, Hold Notes can't be pressed if you miss,\nand count as a single Hit/Miss.\nUncheck this if you prefer the old input system.",
 			'guitarHeroSustains',
 			BOOL
 		);
@@ -140,7 +143,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		#if desktop
 		var option:Option = new Option(
 			'Minimize Volume on Lost Focus',
-			"Minimizes the game's volume when the window loses focus.\nOnly works on desktop platforms!",
+			"Minimizes the game's volume when the window loses focus.",
 			'minimizeVolume',
 			BOOL
 		);
@@ -151,7 +154,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 	}
 
 	function onChangeHitsoundVolume()
-		FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.data.hitsoundVolume);
+		FlxG.sound.play(PathsUtil.sound('hitsound'), ClientPrefs.data.hitsoundVolume);
 
 	function onChangeAutoPause()
 		FlxG.autoPause = ClientPrefs.data.autoPause;

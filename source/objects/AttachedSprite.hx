@@ -16,11 +16,11 @@ class AttachedSprite extends FlxSprite
 	{
 		super();
 		if(anim != null) {
-			frames = Paths.getSparrowAtlas(file, parentFolder);
+			frames = PathsUtil.getSparrowAtlas(file, parentFolder);
 			animation.addByPrefix('idle', anim, 24, loop);
 			animation.play('idle');
 		} else if(file != null) {
-			loadGraphic(Paths.image(file, parentFolder));
+			loadGraphic(PathsUtil.image(file, parentFolder));
 		}
 		antialiasing = ClientPrefs.data.antialiasing;
 		scrollFactor.set();

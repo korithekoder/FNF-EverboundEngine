@@ -14,9 +14,9 @@
 	"weekBackground": "phillystreets",
 
 	"storyName": "Due Debts",
-	"weekBefore": "",
+	"weekBefore": "week7",
 	"weekName": "Weekend 1",
-	"startUnlocked": true,
+	"startUnlocked": false,
 
 	"hideStoryMode": false,
 	"hideFreeplay": false,

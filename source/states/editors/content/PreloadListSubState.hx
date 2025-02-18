@@ -4,7 +4,8 @@ import haxe.io.Path;
 import flixel.util.FlxDestroyUtil;
 import flash.net.FileFilter;
 
-import backend.StageData;
+import backend.display.MusicBeatSubstate;
+import backend.data.StageData;
 import backend.ui.PsychUIButton;
 import backend.ui.PsychUIRadioGroup;
 import backend.ui.PsychUICheckBox;
@@ -268,8 +269,8 @@ class PreloadListSubState extends MusicBeatSubstate implements PsychUIEvent
 		outputTxt.text = txt;
 		outputTime = 3;
 		
-		if(isError) FlxG.sound.play(Paths.sound('cancelMenu'), 0.4);
-		else FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		if(isError) FlxG.sound.play(PathsUtil.sound('cancelMenu'), 0.4);
+		else FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.4);
 	}
 	
 	override function destroy()

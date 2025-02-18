@@ -1,11 +1,11 @@
-package backend;
+package backend.config;
 
 import haxe.io.Path;
 
-/*
-A class that simply points OpenALSoft to a custom configuration file when the game starts up.
-The config overrides a few global OpenALSoft settings with the aim of improving audio quality on desktop targets.
-*/
+/**
+ * A class that simply points OpenALSoft to a custom configuration file when the game starts up.
+ * The config overrides a few global OpenALSoft settings with the aim of improving audio quality on desktop targets.
+ */
 @:keep class ALSoftConfig
 {
 	#if desktop

@@ -43,7 +43,7 @@ class DialogueCharacter extends FlxSprite
 		this.curCharacter = character;
 
 		reloadCharacterJson(character);
-		frames = Paths.getSparrowAtlas('dialogue/' + jsonFile.image);
+		frames = PathsUtil.getSparrowAtlas('dialogue/' + jsonFile.image);
 		reloadAnimations();
 
 		antialiasing = ClientPrefs.data.antialiasing;
@@ -55,18 +55,18 @@ class DialogueCharacter extends FlxSprite
 		var rawJson = null;
 
 		#if MODS_ALLOWED
-		var path:String = Paths.modFolders(characterPath);
+		var path:String = PathsUtil.modFolders(characterPath);
 		if (!FileSystem.exists(path)) {
-			path = Paths.getSharedPath(characterPath);
+			path = PathsUtil.getSharedPath(characterPath);
 		}
 
 		if(!FileSystem.exists(path)) {
-			path = Paths.getSharedPath('images/dialogue/' + DEFAULT_CHARACTER + '.json');
+			path = PathsUtil.getSharedPath('images/dialogue/' + DEFAULT_CHARACTER + '.json');
 		}
 		rawJson = File.getContent(path);
 
 		#else
-		var path:String = Paths.getSharedPath(characterPath);
+		var path:String = PathsUtil.getSharedPath(characterPath);
 		rawJson = Assets.getText(path);
 		#end
 		

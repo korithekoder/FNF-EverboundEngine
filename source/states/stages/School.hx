@@ -41,7 +41,7 @@ class School extends BaseStage
 		}
 
 		var bgTrees:FlxSprite = new FlxSprite(repositionShit - 380, -800);
-		bgTrees.frames = Paths.getPackerAtlas('weeb/weebTrees');
+		bgTrees.frames = PathsUtil.getPackerAtlas('weeb/weebTrees');
 		bgTrees.animation.add('treeLoop', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 12);
 		bgTrees.animation.play('treeLoop');
 		bgTrees.scrollFactor.set(0.85, 0.85);
@@ -76,14 +76,14 @@ class School extends BaseStage
 		switch (songName)
 		{
 			case 'senpai':
-				FlxG.sound.playMusic(Paths.music('Lunchbox'), 0);
+				FlxG.sound.playMusic(PathsUtil.music('Lunchbox'), 0);
 				FlxG.sound.music.fadeIn(1, 0, 0.8);
 			case 'roses':
-				FlxG.sound.play(Paths.sound('ANGRY_TEXT_BOX'));
+				FlxG.sound.play(PathsUtil.sound('ANGRY_TEXT_BOX'));
 		}
 		if(isStoryMode && !seenCutscene)
 		{
-			if(songName == 'roses') FlxG.sound.play(Paths.sound('ANGRY'));
+			if(songName == 'roses') FlxG.sound.play(PathsUtil.sound('ANGRY'));
 			initDoof();
 			setStartCallback(schoolIntro);
 		}
@@ -107,14 +107,14 @@ class School extends BaseStage
 	var doof:DialogueBox = null;
 	function initDoof()
 	{
-		var file:String = Paths.txt('$songName/${songName}Dialogue_${ClientPrefs.data.language}'); //Checks for vanilla/Senpai dialogue
+		var file:String = PathsUtil.txt('$songName/${songName}Dialogue_${ClientPrefs.data.language}'); //Checks for vanilla/Senpai dialogue
 		#if MODS_ALLOWED
 		if (!FileSystem.exists(file))
 		#else
 		if (!OpenFlAssets.exists(file))
 		#end
 		{
-			file = Paths.txt('$songName/${songName}Dialogue');
+			file = PathsUtil.txt('$songName/${songName}Dialogue');
 		}
 
 		#if MODS_ALLOWED

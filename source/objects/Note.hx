@@ -1,7 +1,7 @@
 package objects;
 
 import backend.animation.PsychAnimationController;
-import backend.NoteTypesConfig;
+import backend.config.NoteTypesConfig;
 
 import shaders.RGBPalette;
 import shaders.RGBPalette.RGBShaderReference;
@@ -227,7 +227,7 @@ class Note extends FlxSprite
 					gfNote = true;
 			}
 			if (value != null && value.length > 1) NoteTypesConfig.applyNoteTypeData(this, value);
-			if (hitsound != 'hitsound' && hitsoundVolume > 0) Paths.sound(hitsound); //precache new sound for being idiot-proof
+			if (hitsound != 'hitsound' && hitsoundVolume > 0) PathsUtil.sound(hitsound); //precache new sound for being idiot-proof
 			noteType = value;
 		}
 		return value;
@@ -378,7 +378,7 @@ class Note extends FlxSprite
 		var skinPostfix:String = getNoteSkinPostfix();
 		var customSkin:String = skin + skinPostfix;
 		var path:String = PlayState.isPixelStage ? 'pixelUI/' : '';
-		if(customSkin == _lastValidChecked || Paths.fileExists('images/' + path + customSkin + '.png', IMAGE))
+		if(customSkin == _lastValidChecked || PathsUtil.fileExists('images/' + path + customSkin + '.png', IMAGE))
 		{
 			skin = customSkin;
 			_lastValidChecked = customSkin;
@@ -387,11 +387,11 @@ class Note extends FlxSprite
 
 		if(PlayState.isPixelStage) {
 			if(isSustainNote) {
-				var graphic = Paths.image('pixelUI/' + skinPixel + 'ENDS' + skinPostfix);
+				var graphic = PathsUtil.image('pixelUI/' + skinPixel + 'ENDS' + skinPostfix);
 				loadGraphic(graphic, true, Math.floor(graphic.width / 4), Math.floor(graphic.height / 2));
 				originalHeight = graphic.height / 2;
 			} else {
-				var graphic = Paths.image('pixelUI/' + skinPixel + skinPostfix);
+				var graphic = PathsUtil.image('pixelUI/' + skinPixel + skinPostfix);
 				loadGraphic(graphic, true, Math.floor(graphic.width / 4), Math.floor(graphic.height / 5));
 			}
 			setGraphicSize(Std.int(width * PlayState.daPixelZoom));
@@ -404,7 +404,7 @@ class Note extends FlxSprite
 				offsetX -= _lastNoteOffX;
 			}
 		} else {
-			frames = Paths.getSparrowAtlas(skin);
+			frames = PathsUtil.getSparrowAtlas(skin);
 			loadNoteAnims();
 			if(!isSustainNote)
 			{

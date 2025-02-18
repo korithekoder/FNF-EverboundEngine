@@ -19,14 +19,14 @@ class ErrorState extends MusicBeatState
 	public var errorText:FlxText;
 	override function create()
 	{
-		var bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		var bg = new FlxSprite().loadGraphic(PathsUtil.image('menuDesat'));
 		bg.color = FlxColor.GRAY;
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		add(bg);
 		bg.screenCenter();
 
 		errorText = new FlxText(0, 0, FlxG.width - 300, errorMsg, 32);
-		errorText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		errorText.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		errorText.scrollFactor.set();
 		errorText.borderSize = 2;
 		errorText.screenCenter();

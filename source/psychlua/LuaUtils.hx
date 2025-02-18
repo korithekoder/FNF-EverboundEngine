@@ -1,6 +1,6 @@
 package psychlua;
 
-import backend.WeekData;
+import backend.data.WeekData;
 import objects.Character;
 
 import openfl.display.BlendMode;
@@ -123,7 +123,7 @@ class LuaUtils
 		if(FlxG.save.data.modSettings == null) FlxG.save.data.modSettings = new Map<String, Dynamic>();
 
 		var settings:Map<String, Dynamic> = FlxG.save.data.modSettings.get(modName);
-		var path:String = Paths.mods('$modName/data/settings.json');
+		var path:String = PathsUtil.mods('$modName/data/settings.json');
 		if(FileSystem.exists(path))
 		{
 			if(settings == null || !settings.exists(saveTag))
@@ -333,16 +333,16 @@ class LuaUtils
 				//spr.frames = AtlasFrameMaker.construct(image, null, true);
 
 			case 'aseprite', 'ase', 'json', 'jsoni8':
-				spr.frames = Paths.getAsepriteAtlas(image);
+				spr.frames = PathsUtil.getAsepriteAtlas(image);
 
 			case "packer", 'packeratlas', 'pac':
-				spr.frames = Paths.getPackerAtlas(image);
+				spr.frames = PathsUtil.getPackerAtlas(image);
 
 			case 'sparrow', 'sparrowatlas', 'sparrowv2':
-				spr.frames = Paths.getSparrowAtlas(image);
+				spr.frames = PathsUtil.getSparrowAtlas(image);
 
 			default:
-				spr.frames = Paths.getAtlas(image);
+				spr.frames = PathsUtil.getAtlas(image);
 		}
 	}
 

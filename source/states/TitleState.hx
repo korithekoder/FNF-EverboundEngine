@@ -84,14 +84,14 @@ class TitleState extends MusicBeatState
 	{
 		persistentUpdate = true;
 		if (!CacheUtil.isInitialized && FlxG.sound.music == null)
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+			FlxG.sound.playMusic(PathsUtil.music('freakyMenu'), 0);
 
 		loadJsonData();
 		#if TITLE_SCREEN_EASTER_EGG easterEggData(); #end
 		Conductor.bpm = musicBPM;
 
 		logoBl = new FlxSprite(logoPosition.x, logoPosition.y);
-		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
+		logoBl.frames = PathsUtil.getSparrowAtlas('logoBumpin');
 		logoBl.antialiasing = ClientPrefs.data.antialiasing;
 
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
@@ -108,7 +108,7 @@ class TitleState extends MusicBeatState
 			logoBl.shader = swagShader.shader;
 		}
 		
-		gfDance.frames = Paths.getSparrowAtlas(characterImage);
+		gfDance.frames = PathsUtil.getSparrowAtlas(characterImage);
 		if(!useIdle)
 		{
 			gfDance.animation.addByIndices('danceLeft', animationName, danceLeftFrames, "", 24, false);
@@ -124,7 +124,7 @@ class TitleState extends MusicBeatState
 
 		var animFrames:Array<FlxFrame> = [];
 		titleText = new FlxSprite(enterPosition.x, enterPosition.y);
-		titleText.frames = Paths.getSparrowAtlas('titleEnter');
+		titleText.frames = PathsUtil.getSparrowAtlas('titleEnter');
 		@:privateAccess
 		{
 			titleText.animation.findByPrefix(animFrames, "ENTER IDLE");
@@ -153,7 +153,7 @@ class TitleState extends MusicBeatState
 		credTextShit.screenCenter();
 		credTextShit.visible = false;
 
-		ngSpr = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(Paths.image('newgrounds_logo'));
+		ngSpr = new FlxSprite(0, FlxG.height * 0.52).loadGraphic(PathsUtil.image('newgrounds_logo'));
 		ngSpr.visible = false;
 		ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.8));
 		ngSpr.updateHitbox();
@@ -189,9 +189,9 @@ class TitleState extends MusicBeatState
 
 	function loadJsonData()
 	{
-		if(Paths.fileExists('images/gfDanceTitle.json', TEXT))
+		if(PathsUtil.fileExists('images/gfDanceTitle.json', TEXT))
 		{
-			var titleRaw:String = Paths.getTextFromFile('images/gfDanceTitle.json');
+			var titleRaw:String = PathsUtil.getTextFromFile('images/gfDanceTitle.json');
 			if(titleRaw != null && titleRaw.length > 0)
 			{
 				try
@@ -209,7 +209,7 @@ class TitleState extends MusicBeatState
 	
 					if (titleJSON.backgroundSprite != null && titleJSON.backgroundSprite.trim().length > 0)
 					{
-						var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image(titleJSON.backgroundSprite));
+						var bg:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image(titleJSON.backgroundSprite));
 						bg.antialiasing = ClientPrefs.data.antialiasing;
 						add(bg);
 					}
@@ -264,7 +264,7 @@ class TitleState extends MusicBeatState
 		#if MODS_ALLOWED
 		var firstArray:Array<String> = Mods.mergeAllTextsNamed('data/introText.txt');
 		#else
-		var fullText:String = Assets.getText(Paths.txt('introText'));
+		var fullText:String = Assets.getText(PathsUtil.txt('introText'));
 		var firstArray:Array<String> = fullText.split('\n');
 		#end
 		var swagGoodArray:Array<Array<String>> = [];
@@ -343,7 +343,7 @@ class TitleState extends MusicBeatState
 				if(titleText != null) titleText.animation.play('press');
 
 				FlxG.camera.flash(ClientPrefs.data.flashing ? FlxColor.WHITE : 0x4CFFFFFF, 1);
-				FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+				FlxG.sound.play(PathsUtil.sound('confirmMenu'), 0.7);
 
 				transitioning = true;
 				// FlxG.sound.music.stop();
@@ -377,7 +377,7 @@ class TitleState extends MusicBeatState
 								FlxG.save.data.psychDevsEasterEgg = word;
 							FlxG.save.flush();
 
-							FlxG.sound.play(Paths.sound('secret'));
+							FlxG.sound.play(PathsUtil.sound('secret'));
 
 							var black:FlxSprite = new FlxSprite(0, 0).makeGraphic(1, 1, FlxColor.BLACK);
 							black.scale.set(FlxG.width, FlxG.height);
@@ -487,7 +487,7 @@ class TitleState extends MusicBeatState
 			{
 				case 1:
 					//FlxG.sound.music.stop();
-					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+					FlxG.sound.playMusic(PathsUtil.music('freakyMenu'), 0);
 					FlxG.sound.music.fadeIn(4, 0, 0.7);
 				case 2:
 					createCoolText(['Everbound Engine by'], 40);
@@ -539,13 +539,13 @@ class TitleState extends MusicBeatState
 				switch(easteregg)
 				{
 					case 'RIVEREN':
-						sound = FlxG.sound.play(Paths.sound('JingleRiver'));
+						sound = FlxG.sound.play(PathsUtil.sound('JingleRiver'));
 					case 'SHADOW':
-						FlxG.sound.play(Paths.sound('JingleShadow'));
+						FlxG.sound.play(PathsUtil.sound('JingleShadow'));
 					case 'BBPANZU':
-						sound = FlxG.sound.play(Paths.sound('JingleBB'));
+						sound = FlxG.sound.play(PathsUtil.sound('JingleBB'));
 					case 'PESSY':
-						sound = FlxG.sound.play(Paths.sound('JinglePessy'));
+						sound = FlxG.sound.play(PathsUtil.sound('JinglePessy'));
 
 					default: //Go back to normal ugly ass boring GF
 						remove(ngSpr);
@@ -553,7 +553,7 @@ class TitleState extends MusicBeatState
 						FlxG.camera.flash(FlxColor.WHITE, 2);
 						skippedIntro = true;
 
-						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+						FlxG.sound.playMusic(PathsUtil.music('freakyMenu'), 0);
 						FlxG.sound.music.fadeIn(4, 0, 0.7);
 						return;
 				}
@@ -575,7 +575,7 @@ class TitleState extends MusicBeatState
 					remove(credGroup);
 					FlxG.camera.flash(FlxColor.WHITE, 3);
 					sound.onComplete = function() {
-						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+						FlxG.sound.playMusic(PathsUtil.music('freakyMenu'), 0);
 						FlxG.sound.music.fadeIn(4, 0, 0.7);
 						transitioning = false;
 						#if ACHIEVEMENTS_ALLOWED

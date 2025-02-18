@@ -1,6 +1,6 @@
 package substates;
 
-import backend.WeekData;
+import backend.data.WeekData;
 
 import objects.Character;
 import flixel.FlxObject;
@@ -70,7 +70,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		boyfriend.skipDance = true;
 		add(boyfriend);
 
-		FlxG.sound.play(Paths.sound(deathSoundName));
+		FlxG.sound.play(PathsUtil.sound(deathSoundName));
 		FlxG.camera.scroll.set();
 		FlxG.camera.target = null;
 
@@ -84,12 +84,12 @@ class GameOverSubstate extends MusicBeatSubstate
 		
 		PlayState.instance.setOnScripts('inGameOver', true);
 		PlayState.instance.callOnScripts('onGameOverStart', []);
-		FlxG.sound.music.loadEmbedded(Paths.music(loopSoundName), true);
+		FlxG.sound.music.loadEmbedded(PathsUtil.music(loopSoundName), true);
 
 		if(characterName == 'pico-dead')
 		{
 			overlay = new FlxSprite(boyfriend.x + 205, boyfriend.y - 80);
-			overlay.frames = Paths.getSparrowAtlas('Pico_Death_Retry');
+			overlay.frames = PathsUtil.getSparrowAtlas('Pico_Death_Retry');
 			overlay.animation.addByPrefix('deathLoop', 'Retry Text Loop', 24, true);
 			overlay.animation.addByPrefix('deathConfirm', 'Retry Text Confirm', 24, false);
 			overlay.antialiasing = ClientPrefs.data.antialiasing;
@@ -116,7 +116,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			if(PlayState.instance.gf != null && PlayState.instance.gf.curCharacter == 'nene')
 			{
 				var neneKnife:FlxSprite = new FlxSprite(boyfriend.x - 450, boyfriend.y - 250);
-				neneKnife.frames = Paths.getSparrowAtlas('NeneKnifeToss');
+				neneKnife.frames = PathsUtil.getSparrowAtlas('NeneKnifeToss');
 				neneKnife.animation.addByPrefix('anim', 'knife toss', 24, false);
 				neneKnife.antialiasing = ClientPrefs.data.antialiasing;
 				neneKnife.animation.finishCallback = function(_)
@@ -171,7 +171,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				else
 					MusicBeatState.switchState(new FreeplayState());
 	
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FlxG.sound.playMusic(PathsUtil.music('freakyMenu'));
 				PlayState.instance.callOnScripts('onGameOverConfirm', [false]);
 			}
 			else if (justPlayedLoop)
@@ -184,7 +184,7 @@ class GameOverSubstate extends MusicBeatSubstate
 						var exclude:Array<Int> = [];
 						//if(!ClientPrefs.cursing) exclude = [1, 3, 8, 13, 17, 21];
 	
-						FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + FlxG.random.int(1, 25, exclude)), 1, false, null, true, function() {
+						FlxG.sound.play(PathsUtil.sound('jeffGameover/jeffGameover-' + FlxG.random.int(1, 25, exclude)), 1, false, null, true, function() {
 							if(!isEnding)
 							{
 								FlxG.sound.music.fadeIn(0.2, 1, 4);
@@ -228,7 +228,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				overlay.offset.set(overlayConfirmOffsets.x, overlayConfirmOffsets.y);
 			}
 			FlxG.sound.music.stop();
-			FlxG.sound.play(Paths.music(endSoundName));
+			FlxG.sound.play(PathsUtil.music(endSoundName));
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)
 			{
 				FlxG.camera.fade(FlxColor.BLACK, 2, false, function()

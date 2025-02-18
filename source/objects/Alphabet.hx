@@ -281,13 +281,13 @@ class AlphaCharacter extends FlxSprite
 
 	public static function loadAlphabetData(request:String = 'alphabet')
 	{
-		var path:String = Paths.getPath('images/$request.json');
+		var path:String = PathsUtil.getPath('images/$request.json');
 		#if MODS_ALLOWED
 		if(!FileSystem.exists(path))
 		#else
 		if(!Assets.exists(path, TEXT))
 		#end
-			path = Paths.getPath('images/alphabet.json');
+			path = PathsUtil.getPath('images/alphabet.json');
 
 		allLetters = new Map<String, Null<Letter>>();
 		try
@@ -413,7 +413,7 @@ class AlphaCharacter extends FlxSprite
 		if(frames == null) //first setup
 		{
 			image = name;
-			frames = Paths.getSparrowAtlas(name);
+			frames = PathsUtil.getSparrowAtlas(name);
 			return name;
 		}
 
@@ -423,7 +423,7 @@ class AlphaCharacter extends FlxSprite
 			lastAnim = animation.name;
 		}
 		image = name;
-		frames = Paths.getSparrowAtlas(name);
+		frames = PathsUtil.getSparrowAtlas(name);
 		this.scale.x = parent.scaleX;
 		this.scale.y = parent.scaleY;
 		alignOffset = 0;

@@ -1,4 +1,4 @@
-package backend;
+package backend.gameplay;
 
 #if ACHIEVEMENTS_ALLOWED
 import objects.AchievementPopup;
@@ -154,7 +154,7 @@ class Achievements {
 		var time:Int = openfl.Lib.getTimer();
 		if(Math.abs(time - _lastUnlock) >= 100) //If last unlocked happened in less than 100 ms (0.1s) ago, then don't play sound
 		{
-			FlxG.sound.play(Paths.sound('confirmMenu'), 0.5);
+			FlxG.sound.play(PathsUtil.sound('confirmMenu'), 0.5);
 			_lastUnlock = time;
 		}
 
@@ -211,11 +211,11 @@ class Achievements {
 
 		var modLoaded:String = Mods.currentModDirectory;
 		Mods.currentModDirectory = null;
-		loadAchievementJson(Paths.mods('data/achievements.json'));
+		loadAchievementJson(PathsUtil.mods('data/achievements.json'));
 		for (i => mod in Mods.parseList().enabled)
 		{
 			Mods.currentModDirectory = mod;
-			loadAchievementJson(Paths.mods('$mod/data/achievements.json'));
+			loadAchievementJson(PathsUtil.mods('$mod/data/achievements.json'));
 		}
 		Mods.currentModDirectory = modLoaded;
 	}

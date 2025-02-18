@@ -85,7 +85,7 @@ class NoteSplashDebugState extends MusicBeatState implements PsychUIEventHandler
 				missingText.screenCenter(Y);
 				missingText.visible = true;
 				missingTextBG.visible = true;
-				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 
 				new FlxTimer().start(2.5, function(tmr:FlxTimer)
 				{
@@ -122,17 +122,17 @@ class NoteSplashDebugState extends MusicBeatState implements PsychUIEventHandler
 
 		//
 		offsetsText = new FlxText(300, 150, 680, '', 16);
-		offsetsText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		offsetsText.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		offsetsText.scrollFactor.set();
 		add(offsetsText);
 
 		curFrameText = new FlxText(300, 100, 680, '', 16);
-		curFrameText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		curFrameText.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		curFrameText.scrollFactor.set();
 		add(curFrameText);
 
 		curAnimText = new FlxText(300, 50, 680, '', 16);
-		curAnimText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		curAnimText.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		curAnimText.scrollFactor.set();
 		add(curAnimText);
 
@@ -141,12 +141,12 @@ class NoteSplashDebugState extends MusicBeatState implements PsychUIEventHandler
 			Press ENTER twice to save to the loaded Note Splash PNG's folder\n
 			A/D change selected note - Arrow Keys to change offset (Hold shift for 10x)\n
 			Ctrl + C/V - Copy & Paste", 16);
-		text.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		text.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.scrollFactor.set();
 		add(text);
 
 		savedText = new FlxText(0, 340, FlxG.width, '', 24);
-		savedText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		savedText.setFormat(PathsUtil.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		savedText.scrollFactor.set();
 		add(savedText);
 
@@ -156,7 +156,7 @@ class NoteSplashDebugState extends MusicBeatState implements PsychUIEventHandler
 		add(missingTextBG);
 
 		missingText = new FlxText(50, 0, FlxG.width - 100, '', 24);
-		missingText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		missingText.setFormat(PathsUtil.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		missingText.scrollFactor.set();
 		missingText.visible = false;
 		add(missingText);
@@ -176,7 +176,7 @@ class NoteSplashDebugState extends MusicBeatState implements PsychUIEventHandler
 		if(controls.BACK && notTyping)
 		{
 			MusicBeatState.switchState(new MasterEditorMenu());
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			FlxG.sound.playMusic(PathsUtil.music('freakyMenu'));
 			FlxG.mouse.visible = false;
 		}
 		super.update(elapsed);
@@ -248,7 +248,7 @@ class NoteSplashDebugState extends MusicBeatState implements PsychUIEventHandler
 			if(pressEnterToSave > 0) //save
 			{
 				saveFile();
-				FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
+				FlxG.sound.play(PathsUtil.sound('confirmMenu'), 0.4);
 				pressEnterToSave = 0;
 				visibleTime = 3;
 			}
@@ -298,7 +298,7 @@ class NoteSplashDebugState extends MusicBeatState implements PsychUIEventHandler
 	{
 		texturePath = 'noteSplashes/' + textureName;
 		splashes.forEachAlive(function(spr:FlxSprite) {
-			spr.frames = Paths.getSparrowAtlas(texturePath);
+			spr.frames = PathsUtil.getSparrowAtlas(texturePath);
 		});
 	
 		// Initialize config
@@ -328,7 +328,7 @@ class NoteSplashDebugState extends MusicBeatState implements PsychUIEventHandler
 		for (offGroup in config.offsets)
 			strToSave += '\n' + offGroup[0] + ' ' + offGroup[1];
 
-		var pathSplit:Array<String> = (Paths.getPath('images/$texturePath.png', IMAGE, true).split('.png')[0] + '.txt').split(':');
+		var pathSplit:Array<String> = (PathsUtil.getPath('images/$texturePath.png', IMAGE, true).split('.png')[0] + '.txt').split(':');
 		var path:String = pathSplit[pathSplit.length-1].trim();
 		savedText.text = 'Saved to: $path';
 		File.saveContent(path, strToSave);

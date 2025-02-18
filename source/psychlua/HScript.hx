@@ -91,7 +91,7 @@ class HScript extends Iris
 			this.origin = filePath;
 			#if MODS_ALLOWED
 			var myFolder:Array<String> = filePath.split('/');
-			if(myFolder[0] + '/' == Paths.mods() && (Mods.currentModDirectory == myFolder[1] || Mods.getGlobalMods().contains(myFolder[1]))) //is inside mods folder
+			if(myFolder[0] + '/' == PathsUtil.mods() && (Mods.currentModDirectory == myFolder[1] || Mods.getGlobalMods().contains(myFolder[1]))) //is inside mods folder
 				this.modFolder = myFolder[1];
 			#end
 		}
@@ -151,14 +151,14 @@ class HScript extends Iris
 		set('FlxSprite', flixel.FlxSprite);
 		set('FlxText', flixel.text.FlxText);
 		set('FlxCamera', flixel.FlxCamera);
-		set('PsychCamera', backend.PsychCamera);
+		set('PsychCamera', backend.display.PsychCamera);
 		set('FlxTimer', flixel.util.FlxTimer);
 		set('FlxTween', flixel.tweens.FlxTween);
 		set('FlxEase', flixel.tweens.FlxEase);
 		set('FlxColor', CustomFlxColor);
-		set('Countdown', backend.BaseStage.Countdown);
+		set('Countdown', backend.display.BaseStage.Countdown);
 		set('PlayState', PlayState);
-		set('Paths', Paths);
+		set('Paths', PathsUtil);
 		set('Conductor', Conductor);
 		set('ClientPrefs', ClientPrefs);
 		#if ACHIEVEMENTS_ALLOWED

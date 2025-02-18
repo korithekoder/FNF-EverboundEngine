@@ -1,6 +1,6 @@
 package states.editors;
 
-import backend.WeekData;
+import backend.data.WeekData;
 
 import objects.Character;
 
@@ -34,7 +34,7 @@ class MasterEditorMenu extends MusicBeatState
 		DiscordClient.changePresence("Editors Main Menu", null);
 		#end
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		var bg:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image('menuDesat'));
 		bg.scrollFactor.set();
 		bg.color = 0xFF353535;
 		add(bg);
@@ -57,7 +57,7 @@ class MasterEditorMenu extends MusicBeatState
 		add(textBG);
 
 		directoryTxt = new FlxText(textBG.x, textBG.y + 4, FlxG.width, '', 32);
-		directoryTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
+		directoryTxt.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
 		directoryTxt.scrollFactor.set();
 		add(directoryTxt);
 		
@@ -138,14 +138,14 @@ class MasterEditorMenu extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.4);
 		curSelected = FlxMath.wrap(curSelected + change, 0, options.length - 1);
 	}
 
 	#if MODS_ALLOWED
 	function changeDirectory(change:Int = 0)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.4);
 
 		curDirectory += change;
 

@@ -1,7 +1,7 @@
 package states;
 
 import backend.util.CacheUtil;
-import backend.Mods;
+import backend.data.Mods;
 
 import flixel.graphics.FlxGraphic;
 
@@ -50,8 +50,8 @@ class ModsMenuState extends MusicBeatState
 	}
 	override function create()
 	{
-		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
+		PathsUtil.clearStoredMemory();
+		PathsUtil.clearUnusedMemory();
 		persistentUpdate = false;
 
 		modsList = Mods.parseList();
@@ -62,7 +62,7 @@ class ModsMenuState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg = new FlxSprite().loadGraphic(PathsUtil.image('menuDesat'));
 		bg.color = 0xFF665AFF;
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		add(bg);
@@ -123,7 +123,7 @@ class ModsMenuState extends MusicBeatState
 			}
 			updateModDisplayData();
 			checkToggleButtons();
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
+			FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.6);
 		});
 		buttonEnableAll.bg.color = FlxColor.GREEN;
 		buttonEnableAll.focusChangeCallback = function(focus:Bool) if(!focus) buttonEnableAll.bg.color = FlxColor.GREEN;
@@ -143,7 +143,7 @@ class ModsMenuState extends MusicBeatState
 			}
 			updateModDisplayData();
 			checkToggleButtons();
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
+			FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.6);
 		});
 		buttonDisableAll.bg.color = 0xFFFF6666;
 		buttonDisableAll.focusChangeCallback = function(focus:Bool) if(!focus) buttonDisableAll.bg.color = 0xFFFF6666;
@@ -158,13 +158,13 @@ class ModsMenuState extends MusicBeatState
 			var myX = bgList.x + bgList.width + 20;
 			noModsTxt = new FlxText(myX, 0, FlxG.width - myX - 20, Language.getPhrase('no_mods_installed', 'NO MODS INSTALLED\nPRESS BACK TO EXIT OR INSTALL A MOD'), 48);
 			if(FlxG.random.bool(0.1)) noModsTxt.text += '\nBITCH.'; //meanie
-			noModsTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			noModsTxt.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			noModsTxt.borderSize = 2;
 			add(noModsTxt);
 			noModsTxt.screenCenter(Y);
 
 			var txt = new FlxText(bgList.x + 15, bgList.y + 15, bgList.width - 30, Language.getPhrase('no_mods_found', "No Mods found."), 16);
-			txt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE);
+			txt.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE);
 			add(txt);
 
 			FlxG.autoPause = false;
@@ -190,12 +190,12 @@ class ModsMenuState extends MusicBeatState
 		add(bgDescription);
 		
 		modDesc = new FlxText(bgDescription.x + 15, bgDescription.y + 15, bgDescription.width - 30, "", 24);
-		modDesc.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT);
+		modDesc.setFormat(PathsUtil.font("vcr.ttf"), 24, FlxColor.WHITE, LEFT);
 		add(modDesc);
 
 		var myHeight = 100;
 		modRestartText = new FlxText(bgDescription.x + 15, bgDescription.y + bgDescription.height - myHeight - 25, bgDescription.width - 30, Language.getPhrase('mod_restart', '* Moving or Toggling On/Off this Mod will restart the game.'), 16);
-		modRestartText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
+		modRestartText.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
 		add(modRestartText);
 
 		bgButtons = FlxSpriteUtil.drawRoundRectComplex(new FlxSprite(bgDescription.x, bgDescription.y + bgDescription.height - myHeight).makeGraphic(840, myHeight, FlxColor.TRANSPARENT), 0, 0, 840, myHeight, 0, 0, 15, 15, FlxColor.WHITE);
@@ -206,19 +206,19 @@ class ModsMenuState extends MusicBeatState
 		var buttonsX = bgButtons.x + 320;
 		var buttonsY = bgButtons.y + 10;
 
-		var button = new MenuButton(buttonsX, buttonsY, 80, 80, Paths.image('modsMenuButtons'), function() moveModToPosition(0), 54, 54); //Move to the top
+		var button = new MenuButton(buttonsX, buttonsY, 80, 80, PathsUtil.image('modsMenuButtons'), function() moveModToPosition(0), 54, 54); //Move to the top
 		button.icon.animation.add('icon', [0]);
 		button.icon.animation.play('icon', true);
 		add(button);
 		buttons.push(button);
 
-		var button = new MenuButton(buttonsX + 100, buttonsY, 80, 80, Paths.image('modsMenuButtons'), function() moveModToPosition(curSelectedMod - 1), 54, 54); //Move up
+		var button = new MenuButton(buttonsX + 100, buttonsY, 80, 80, PathsUtil.image('modsMenuButtons'), function() moveModToPosition(curSelectedMod - 1), 54, 54); //Move up
 		button.icon.animation.add('icon', [1]);
 		button.icon.animation.play('icon', true);
 		add(button);
 		buttons.push(button);
 
-		var button = new MenuButton(buttonsX + 200, buttonsY, 80, 80, Paths.image('modsMenuButtons'), function() moveModToPosition(curSelectedMod + 1), 54, 54); //Move down
+		var button = new MenuButton(buttonsX + 200, buttonsY, 80, 80, PathsUtil.image('modsMenuButtons'), function() moveModToPosition(curSelectedMod + 1), 54, 54); //Move down
 		button.icon.animation.add('icon', [2]);
 		button.icon.animation.play('icon', true);
 		add(button);
@@ -230,7 +230,7 @@ class ModsMenuState extends MusicBeatState
 				button.enabled = false;
 		}
 
-		settingsButton = new MenuButton(buttonsX + 300, buttonsY, 80, 80, Paths.image('modsMenuButtons'), function() //Settings
+		settingsButton = new MenuButton(buttonsX + 300, buttonsY, 80, 80, PathsUtil.image('modsMenuButtons'), function() //Settings
 		{
 			var curMod:ModItem = modsGroup.members[curSelectedMod];
 			if(curMod != null && curMod.settings != null && curMod.settings.length > 0)
@@ -247,7 +247,7 @@ class ModsMenuState extends MusicBeatState
 		if(modsGroup.members[curSelectedMod].settings == null || modsGroup.members[curSelectedMod].settings.length < 1)
 			settingsButton.enabled = false;
 
-		var button = new MenuButton(buttonsX + 400, buttonsY, 80, 80, Paths.image('modsMenuButtons'), function() //On/Off
+		var button = new MenuButton(buttonsX + 400, buttonsY, 80, 80, PathsUtil.image('modsMenuButtons'), function() //On/Off
 		{
 			var curMod:ModItem = modsGroup.members[curSelectedMod];
 			var mod:String = curMod.folder;
@@ -267,7 +267,7 @@ class ModsMenuState extends MusicBeatState
 			if(curMod.mustRestart) waitingToRestart = true;
 			updateModDisplayData();
 			checkToggleButtons();
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
+			FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.6);
 		}, 54, 54);
 		button.icon.animation.add('icon', [4]);
 		button.icon.animation.play('icon', true);
@@ -306,7 +306,7 @@ class ModsMenuState extends MusicBeatState
 		{
 			saveTxt();
 
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 			if(waitingToRestart)
 			{
 				CacheUtil.isInitialized = false;
@@ -579,7 +579,7 @@ class ModsMenuState extends MusicBeatState
 			bgButtons.alpha = 0.8;
 		}
 
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.6);
 	}
 
 	function getButton()
@@ -644,7 +644,7 @@ class ModsMenuState extends MusicBeatState
 		holdingElapsed = 0;
 		gottaClickAgain = true;
 		updateModDisplayData();
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.6);
 		
 		if(hoveringOnMods)
 		{
@@ -747,7 +747,7 @@ class ModsMenuState extends MusicBeatState
 			var curMod:ModItem = modsGroup.members[curSelectedMod];
 			if(curMod != null) curMod.selectBg.visible = false;
 		}
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.6);
 	}
 
 	function checkToggleButtons()
@@ -811,7 +811,7 @@ class ModItem extends FlxSpriteGroup
 		this.folder = folder;
 		pack = Mods.getPack(folder);
 
-		var path:String = Paths.mods('$folder/data/settings.json');
+		var path:String = PathsUtil.mods('$folder/data/settings.json');
 		if(FileSystem.exists(path))
 		{
 			try
@@ -840,16 +840,16 @@ class ModItem extends FlxSpriteGroup
 		add(icon);
 
 		text = new FlxText(95, 38, 230, "", 16);
-		text.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		text.setFormat(PathsUtil.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		text.borderSize = 2;
 		text.y -= Std.int(text.height / 2);
 		add(text);
 
 		var isPixel = false;
-		var file:String = Paths.mods('$folder/pack.png');
+		var file:String = PathsUtil.mods('$folder/pack.png');
 		if (!FileSystem.exists(file))
 		{
-			file = Paths.mods('$folder/pack-pixel.png');
+			file = PathsUtil.mods('$folder/pack-pixel.png');
 			isPixel = true;
 		}
 		
@@ -859,10 +859,10 @@ class ModItem extends FlxSpriteGroup
 
 		if(FileSystem.exists(file))
 		{
-			icon.loadGraphic(Paths.cacheBitmap(file, bmp), true, 150, 150);
+			icon.loadGraphic(PathsUtil.cacheBitmap(file, bmp), true, 150, 150);
 			if(isPixel) icon.antialiasing = false;
 		}
-		else icon.loadGraphic(Paths.image('unknownMod'), true, 150, 150);
+		else icon.loadGraphic(PathsUtil.image('unknownMod'), true, 150, 150);
 		icon.scale.set(0.5, 0.5);
 		icon.updateHitbox();
 		

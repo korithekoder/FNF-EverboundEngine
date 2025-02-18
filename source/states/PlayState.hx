@@ -1,10 +1,10 @@
 package states;
 
-import backend.Highscore;
-import backend.StageData;
-import backend.WeekData;
-import backend.Song;
-import backend.Rating;
+import backend.gameplay.Highscore;
+import backend.data.StageData;
+import backend.data.WeekData;
+import backend.data.Song;
+import backend.gameplay.Rating;
 
 import flixel.FlxBasic;
 import flixel.FlxObject;
@@ -56,21 +56,17 @@ import crowplexus.hscript.Printer;
 #end
 
 /**
- * This is where all the Gameplay stuff happens and is managed
- *
- * here's some useful tips if you are making a mod in source:
- *
- * If you want to add your stage to the game, copy states/stages/Template.hx,
- * and put your stage code there, then, on PlayState, search for
- * "switch (curStage)", and add your stage to that list.
- *
- * If you want to code Events, you can either code it on a Stage file or on PlayState, if you're doing the latter, search for:
- *
- * "function eventPushed" - Only called *one time* when the game loads, use it for precaching events that use the same assets, no matter the values
- * "function eventPushedUnique" - Called one time per event, use it for precaching events that uses different assets based on its values
- * "function eventEarlyTrigger" - Used for making your event start a few MILLISECONDS earlier
- * "function triggerEvent" - Called when the song hits your event's timestamp, this is probably what you were looking for
-**/
+ * State where all of the cool funky gameplay happens.
+ * 
+ * If you want to go the extra mile and code a mod in source, then here is some helpful info:
+ * 
+ * - When adding a stage, press `Ctrl` + `F` and search for `switch (curStage)`, and then add your
+ * stage file accordingly. Remember to create a stage in a Haxe file located in `states.stages`.
+ *   - There is a file called `Template.hx` you can copy and make your stage accordingly. ;3
+ * 
+ * - To add and create an event, search for `function triggerEvent` and then inside the switch statement,
+ * add a new case statement with the name of your event, then add your code.
+ */
 class PlayState extends MusicBeatState
 {
 	public static var STRUM_X = 42;
@@ -139,7 +135,7 @@ class PlayState extends MusicBeatState
 	static function get_isPixelStage():Bool
 		return stageUI == "pixel" || stageUI.endsWith("-pixel");
 
-	public static var SONG:SwagSong = null;
+	public static var SONG:SongData = null;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
@@ -162,6 +158,7 @@ class PlayState extends MusicBeatState
 	public var camFollow:FlxObject;
 	private static var prevCamFollow:FlxObject;
 
+	public var noteLanes:FlxTypedGroup<FlxSprite> = new FlxTypedGroup<FlxSprite>();
 	public var strumLineNotes:FlxTypedGroup<StrumNote> = new FlxTypedGroup<StrumNote>();
 	public var opponentStrums:FlxTypedGroup<StrumNote> = new FlxTypedGroup<StrumNote>();
 	public var playerStrums:FlxTypedGroup<StrumNote> = new FlxTypedGroup<StrumNote>();
@@ -270,10 +267,10 @@ class PlayState extends MusicBeatState
 	{
 		//trace('Playback Rate: ' + playbackRate);
 		_lastLoadedModDirectory = Mods.currentModDirectory;
-		Paths.clearStoredMemory();
+		PathsUtil.clearStoredMemory();
 		if(nextReloadAll)
 		{
-			Paths.clearUnusedMemory();
+			PathsUtil.clearUnusedMemory();
 			Language.reloadPhrases();
 		}
 		nextReloadAll = false;
@@ -305,7 +302,6 @@ class PlayState extends MusicBeatState
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay');
 		guitarHeroSustains = ClientPrefs.data.guitarHeroSustains;
 
-		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = initPsychCamera();
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
@@ -335,9 +331,9 @@ class PlayState extends MusicBeatState
 		#end
 
 		GameOverSubstate.resetVariables();
-		songName = Paths.formatToSongPath(SONG.song);
+		songName = PathsUtil.formatToSongPath(SONG.song);
 		if(SONG.stage == null || SONG.stage.length < 1)
-			SONG.stage = StageData.vanillaSongStage(Paths.formatToSongPath(Song.loadedSongName));
+			SONG.stage = StageData.vanillaSongStage(PathsUtil.formatToSongPath(Song.loadedSongName));
 
 		curStage = SONG.stage;
 
@@ -378,17 +374,17 @@ class PlayState extends MusicBeatState
 
 		switch (curStage)
 		{
-			case 'stage': new StageWeek1(); 			//Week 1
-			case 'spooky': new Spooky();				//Week 2
-			case 'philly': new Philly();				//Week 3
-			case 'limo': new Limo();					//Week 4
-			case 'mall': new Mall();					//Week 5 - Cocoa, Eggnog
-			case 'mallEvil': new MallEvil();			//Week 5 - Winter Horrorland
-			case 'school': new School();				//Week 6 - Senpai, Roses
-			case 'schoolEvil': new SchoolEvil();		//Week 6 - Thorns
-			case 'tank': new Tank();					//Week 7 - Ugh, Guns, Stress
-			case 'phillyStreets': new PhillyStreets(); 	//Weekend 1 - Darnell, Lit Up, 2Hot
-			case 'phillyBlazin': new PhillyBlazin();	//Weekend 1 - Blazin
+			case 'stage': new StageWeek1(); 			// Week 1
+			case 'spooky': new Spooky();				// Week 2
+			case 'philly': new Philly();				// Week 3
+			case 'limo': new Limo();					// Week 4
+			case 'mall': new Mall();					// Week 5 - Cocoa, Eggnog
+			case 'mallEvil': new MallEvil();			// Week 5 - Winter Horrorland
+			case 'school': new School();				// Week 6 - Senpai, Roses
+			case 'schoolEvil': new SchoolEvil();		// Week 6 - Thorns
+			case 'tank': new Tank();					// Week 7 - Ugh, Guns, Stress
+			case 'phillyStreets': new PhillyStreets(); 	// Weekend 1 - Darnell, Lit Up, 2Hot
+			case 'phillyBlazin': new PhillyBlazin();	// Weekend 1 - Blazin
 		}
 		if(isPixelStage) introSoundsSuffix = '-pixel';
 
@@ -431,7 +427,7 @@ class PlayState extends MusicBeatState
 		
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
 		// "SCRIPTS FOLDER" SCRIPTS
-		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'scripts/'))
+		for (folder in Mods.directoriesWithFile(PathsUtil.getSharedPath(), 'scripts/'))
 			for (file in FileSystem.readDirectory(folder))
 			{
 				#if LUA_ALLOWED
@@ -470,17 +466,17 @@ class PlayState extends MusicBeatState
 		startCharacterScripts(boyfriend.curCharacter);
 		#end
 
+		noteGroup = new FlxTypedGroup<FlxBasic>();
 		uiGroup = new FlxSpriteGroup();
 		comboGroup = new FlxSpriteGroup();
-		noteGroup = new FlxTypedGroup<FlxBasic>();
-		add(comboGroup);
-		add(uiGroup);
 		add(noteGroup);
+		add(uiGroup);
+		add(comboGroup);
 
 		Conductor.songPosition = -Conductor.crochet * 5 + Conductor.offset;
 		var showTime:Bool = (ClientPrefs.data.timeBarType != 'Disabled');
 		timeTxt = new FlxText(STRUM_X + (FlxG.width / 2) - 248, 19, 400, "", 32);
-		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		timeTxt.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
 		timeTxt.alpha = 0;
 		timeTxt.borderSize = 2;
@@ -496,6 +492,7 @@ class PlayState extends MusicBeatState
 		uiGroup.add(timeBar);
 		uiGroup.add(timeTxt);
 
+		noteGroup.add(noteLanes);
 		noteGroup.add(strumLineNotes);
 
 		if(ClientPrefs.data.timeBarType == 'Song Name')
@@ -548,14 +545,14 @@ class PlayState extends MusicBeatState
 		uiGroup.add(iconP2);
 
 		scoreTxt = new FlxText(0, healthBar.y + 40, FlxG.width, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt.setFormat(PathsUtil.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
 		scoreTxt.visible = !ClientPrefs.data.hideHud;
 		uiGroup.add(scoreTxt);
 
 		botplayTxt = new FlxText(400, healthBar.y - 90, FlxG.width - 800, Language.getPhrase("Botplay").toUpperCase(), 32);
-		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		botplayTxt.setFormat(PathsUtil.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
 		botplayTxt.borderSize = 1.25;
 		botplayTxt.visible = cpuControlled;
@@ -587,7 +584,7 @@ class PlayState extends MusicBeatState
 
 		// SONG SPECIFIC SCRIPTS
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
-		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'data/$songName/'))
+		for (folder in Mods.directoriesWithFile(PathsUtil.getSharedPath(), 'data/$songName/'))
 			for (file in FileSystem.readDirectory(folder))
 			{
 				#if LUA_ALLOWED
@@ -614,15 +611,15 @@ class PlayState extends MusicBeatState
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
 
-		//PRECACHING THINGS THAT GET USED FREQUENTLY TO AVOID LAGSPIKES
-		if(ClientPrefs.data.hitsoundVolume > 0) Paths.sound('hitsound');
-		if(!ClientPrefs.data.ghostTapping) for (i in 1...4) Paths.sound('missnote$i');
-		Paths.image('alphabet');
+		// PRECACHING THINGS THAT GET USED FREQUENTLY TO AVOID LAGSPIKES
+		if(ClientPrefs.data.hitsoundVolume > 0) PathsUtil.sound('hitsound');
+		if(!ClientPrefs.data.ghostTapping) for (i in 1...4) PathsUtil.sound('missnote$i');
+		PathsUtil.image('alphabet');
 
 		if (PauseSubState.songName != null)
-			Paths.music(PauseSubState.songName);
-		else if(Paths.formatToSongPath(ClientPrefs.data.pauseMusic) != 'none')
-			Paths.music(Paths.formatToSongPath(ClientPrefs.data.pauseMusic));
+			PathsUtil.music(PauseSubState.songName);
+		else if(PathsUtil.formatToSongPath(ClientPrefs.data.pauseMusic) != 'none')
+			PathsUtil.music(PathsUtil.formatToSongPath(ClientPrefs.data.pauseMusic));
 
 		resetRPC();
 
@@ -634,7 +631,7 @@ class PlayState extends MusicBeatState
 		splash.alpha = 0.000001; //cant make it invisible or it won't allow precaching
 
 		super.create();
-		Paths.clearUnusedMemory();
+		PathsUtil.clearUnusedMemory();
 
 		cacheCountdown();
 		cachePopUpScore();
@@ -753,7 +750,7 @@ class PlayState extends MusicBeatState
 		var doPush:Bool = false;
 		var luaFile:String = 'characters/$name.lua';
 		#if MODS_ALLOWED
-		var replacePath:String = Paths.modFolders(luaFile);
+		var replacePath:String = PathsUtil.modFolders(luaFile);
 		if(FileSystem.exists(replacePath))
 		{
 			luaFile = replacePath;
@@ -761,12 +758,12 @@ class PlayState extends MusicBeatState
 		}
 		else
 		{
-			luaFile = Paths.getSharedPath(luaFile);
+			luaFile = PathsUtil.getSharedPath(luaFile);
 			if(FileSystem.exists(luaFile))
 				doPush = true;
 		}
 		#else
-		luaFile = Paths.getSharedPath(luaFile);
+		luaFile = PathsUtil.getSharedPath(luaFile);
 		if(Assets.exists(luaFile)) doPush = true;
 		#end
 
@@ -789,7 +786,7 @@ class PlayState extends MusicBeatState
 		var doPush:Bool = false;
 		var scriptFile:String = 'characters/' + name + '.hx';
 		#if MODS_ALLOWED
-		var replacePath:String = Paths.modFolders(scriptFile);
+		var replacePath:String = PathsUtil.modFolders(scriptFile);
 		if(FileSystem.exists(replacePath))
 		{
 			scriptFile = replacePath;
@@ -798,7 +795,7 @@ class PlayState extends MusicBeatState
 		else
 		#end
 		{
-			scriptFile = Paths.getSharedPath(scriptFile);
+			scriptFile = PathsUtil.getSharedPath(scriptFile);
 			if(FileSystem.exists(scriptFile))
 				doPush = true;
 		}
@@ -834,7 +831,7 @@ class PlayState extends MusicBeatState
 		canPause = forMidSong;
 
 		var foundFile:Bool = false;
-		var fileName:String = Paths.video(name);
+		var fileName:String = PathsUtil.video(name);
 
 		#if sys
 		if (FileSystem.exists(fileName))
@@ -895,7 +892,7 @@ class PlayState extends MusicBeatState
 
 	var dialogueCount:Int = 0;
 	public var psychDialogue:DialogueBoxPsych;
-	//You don't have to add a song, just saying. You can just do "startDialogue(DialogueBoxPsych.parseDialogue(Paths.json(songName + '/dialogue')))" and it should load dialogue.json
+	//You don't have to add a song, just saying. You can just do "startDialogue(DialogueBoxPsych.parseDialogue(PathsUtil.json(songName + '/dialogue')))" and it should load dialogue.json
 	public function startDialogue(dialogueFile:DialogueFile, ?song:String = null):Void
 	{
 		// TO DO: Make this more flexible, maybe?
@@ -945,12 +942,12 @@ class PlayState extends MusicBeatState
 		}
 		introAssets.set(stageUI, introImagesArray);
 		var introAlts:Array<String> = introAssets.get(stageUI);
-		for (asset in introAlts) Paths.image(asset);
+		for (asset in introAlts) PathsUtil.image(asset);
 
-		Paths.sound('intro3' + introSoundsSuffix);
-		Paths.sound('intro2' + introSoundsSuffix);
-		Paths.sound('intro1' + introSoundsSuffix);
-		Paths.sound('introGo' + introSoundsSuffix);
+		PathsUtil.sound('intro3' + introSoundsSuffix);
+		PathsUtil.sound('intro2' + introSoundsSuffix);
+		PathsUtil.sound('intro1' + introSoundsSuffix);
+		PathsUtil.sound('introGo' + introSoundsSuffix);
 	}
 
 	public function startCountdown()
@@ -1016,19 +1013,19 @@ class PlayState extends MusicBeatState
 				switch (swagCounter)
 				{
 					case 0:
-						FlxG.sound.play(Paths.sound('intro3' + introSoundsSuffix), 0.6);
+						FlxG.sound.play(PathsUtil.sound('intro3' + introSoundsSuffix), 0.6);
 						tick = THREE;
 					case 1:
 						countdownReady = createCountdownSprite(introAlts[0], antialias);
-						FlxG.sound.play(Paths.sound('intro2' + introSoundsSuffix), 0.6);
+						FlxG.sound.play(PathsUtil.sound('intro2' + introSoundsSuffix), 0.6);
 						tick = TWO;
 					case 2:
 						countdownSet = createCountdownSprite(introAlts[1], antialias);
-						FlxG.sound.play(Paths.sound('intro1' + introSoundsSuffix), 0.6);
+						FlxG.sound.play(PathsUtil.sound('intro1' + introSoundsSuffix), 0.6);
 						tick = ONE;
 					case 3:
 						countdownGo = createCountdownSprite(introAlts[2], antialias);
-						FlxG.sound.play(Paths.sound('introGo' + introSoundsSuffix), 0.6);
+						FlxG.sound.play(PathsUtil.sound('introGo' + introSoundsSuffix), 0.6);
 						tick = GO;
 					case 4:
 						tick = START;
@@ -1059,7 +1056,7 @@ class PlayState extends MusicBeatState
 
 	inline private function createCountdownSprite(image:String, antialias:Bool):FlxSprite
 	{
-		var spr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(image));
+		var spr:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image(image));
 		spr.cameras = [camHUD];
 		spr.scrollFactor.set();
 		spr.updateHitbox();
@@ -1295,10 +1292,10 @@ class PlayState extends MusicBeatState
 		{
 			if (songData.needsVoices)
 			{
-				var playerVocals = Paths.voices(songData.song, (boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) ? 'Player' : boyfriend.vocalsFile);
-				vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
+				var playerVocals = PathsUtil.voices(songData.song, (boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) ? 'Player' : boyfriend.vocalsFile);
+				vocals.loadEmbedded(playerVocals != null ? playerVocals : PathsUtil.voices(songData.song));
 				
-				var oppVocals = Paths.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'Opponent' : dad.vocalsFile);
+				var oppVocals = PathsUtil.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'Opponent' : dad.vocalsFile);
 				if(oppVocals != null && oppVocals.length > 0) opponentVocals.loadEmbedded(oppVocals);
 			}
 		}
@@ -1314,7 +1311,7 @@ class PlayState extends MusicBeatState
 		inst = new FlxSound();
 		try
 		{
-			inst.loadEmbedded(Paths.inst(songData.song));
+			inst.loadEmbedded(PathsUtil.inst(songData.song));
 		}
 		catch (e:Dynamic) {}
 		FlxG.sound.list.add(inst);
@@ -1324,7 +1321,7 @@ class PlayState extends MusicBeatState
 
 		try
 		{
-			var eventsChart:SwagSong = Song.getChart('events', songName);
+			var eventsChart:SongData = Song.getChart('events', songName);
 			if(eventsChart != null)
 				for (event in eventsChart.events) //Event Notes
 					for (i in 0...event[1].length)
@@ -1489,7 +1486,7 @@ class PlayState extends MusicBeatState
 				addCharacterToList(newCharacter, charType);
 
 			case 'Play Sound':
-				Paths.sound(event.value1); //Precache sound
+				PathsUtil.sound(event.value1); //Precache sound
 		}
 		stagesFunc(function(stage:BaseStage) stage.eventPushedUnique(event));
 	}
@@ -1530,7 +1527,6 @@ class PlayState extends MusicBeatState
 		var strumLineY:Float = ClientPrefs.data.downScroll ? (FlxG.height - 150) : 50;
 		for (i in 0...4)
 		{
-			// FlxG.log.add(i);
 			var targetAlpha:Float = 1;
 			if (player < 1)
 			{
@@ -1562,8 +1558,20 @@ class PlayState extends MusicBeatState
 				opponentStrums.add(babyArrow);
 			}
 
-			strumLineNotes.add(babyArrow);
 			babyArrow.playerPosition();
+
+			if (ClientPrefs.data.noteLanes && player == 1) 
+			{
+				var newLane:FlxSprite = new FlxSprite();
+				newLane.makeGraphic(Std.int(babyArrow.width), FlxG.height);
+				newLane.updateHitbox();
+				newLane.setPosition(babyArrow.x, 0);
+				newLane.color = FlxColor.BLACK;
+				newLane.alpha = ClientPrefs.data.noteLaneAlpha;
+				noteLanes.add(newLane);
+			}
+
+			strumLineNotes.add(babyArrow);
 		}
 	}
 
@@ -2292,7 +2300,7 @@ class PlayState extends MusicBeatState
 
 			case 'Play Sound':
 				if(flValue2 == null) flValue2 = 1;
-				FlxG.sound.play(Paths.sound(value1), flValue2);
+				FlxG.sound.play(PathsUtil.sound(value1), flValue2);
 		}
 
 		stagesFunc(function(stage:BaseStage) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
@@ -2452,7 +2460,7 @@ class PlayState extends MusicBeatState
 				if (storyPlaylist.length <= 0)
 				{
 					Mods.loadTopMod();
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
+					FlxG.sound.playMusic(PathsUtil.music('freakyMenu'));
 					#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 
 					canResync = false;
@@ -2473,7 +2481,7 @@ class PlayState extends MusicBeatState
 					var difficulty:String = Difficulty.getFilePath();
 
 					trace('LOADING NEXT SONG');
-					trace(Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
+					trace(PathsUtil.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
 
 					FlxTransitionableState.skipNextTransIn = true;
 					FlxTransitionableState.skipNextTransOut = true;
@@ -2495,7 +2503,7 @@ class PlayState extends MusicBeatState
 
 				canResync = false;
 				MusicBeatState.switchState(new FreeplayState());
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+				FlxG.sound.playMusic(PathsUtil.music('freakyMenu'));
 				changedDifficulty = false;
 			}
 			transitioning = true;
@@ -2535,9 +2543,9 @@ class PlayState extends MusicBeatState
 			uiFolder = uiPrefix + "UI/";
 
 		for (rating in ratingsData)
-			Paths.image(uiFolder + rating.image + uiPostfix);
+			PathsUtil.image(uiFolder + rating.image + uiPostfix);
 		for (i in 0...10)
-			Paths.image(uiFolder + 'num' + i + uiPostfix);
+			PathsUtil.image(uiFolder + 'num' + i + uiPostfix);
 	}
 
 	private function popUpScore(note:Note = null):Void
@@ -2590,7 +2598,7 @@ class PlayState extends MusicBeatState
 			antialias = !isPixelStage;
 		}
 
-		rating.loadGraphic(Paths.image(uiFolder + daRating.image + uiPostfix));
+		rating.loadGraphic(PathsUtil.image(uiFolder + daRating.image + uiPostfix));
 		rating.screenCenter();
 		rating.x = placement - 40;
 		rating.y -= 60;
@@ -2602,7 +2610,7 @@ class PlayState extends MusicBeatState
 		rating.y -= ClientPrefs.data.comboOffset[1];
 		rating.antialiasing = antialias;
 
-		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiFolder + 'combo' + uiPostfix));
+		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image(uiFolder + 'combo' + uiPostfix));
 		comboSpr.screenCenter();
 		comboSpr.x = placement;
 		comboSpr.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
@@ -2637,7 +2645,7 @@ class PlayState extends MusicBeatState
 		var separatedScore:String = Std.string(combo).lpad('0', 3);
 		for (i in 0...separatedScore.length)
 		{
-			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiFolder + 'num' + Std.parseInt(separatedScore.charAt(i)) + uiPostfix));
+			var numScore:FlxSprite = new FlxSprite().loadGraphic(PathsUtil.image(uiFolder + 'num' + Std.parseInt(separatedScore.charAt(i)) + uiPostfix));
 			numScore.screenCenter();
 			numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
 			numScore.y += 80 - ClientPrefs.data.comboOffset[3];
@@ -2881,7 +2889,7 @@ class PlayState extends MusicBeatState
 		if(ClientPrefs.data.ghostTapping) return; //fuck it
 
 		noteMissCommon(direction);
-		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+		FlxG.sound.play(PathsUtil.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 		stagesFunc(function(stage:BaseStage) stage.noteMissPress(direction));
 		callOnScripts('noteMissPress', [direction]);
 	}
@@ -3032,7 +3040,7 @@ class PlayState extends MusicBeatState
 		note.wasGoodHit = true;
 
 		if (note.hitsoundVolume > 0 && !note.hitsoundDisabled)
-			FlxG.sound.play(Paths.sound(note.hitsound), note.hitsoundVolume);
+			FlxG.sound.play(PathsUtil.sound(note.hitsound), note.hitsoundVolume);
 
 		if(!note.hitCausesMiss) //Common notes
 		{
@@ -3184,7 +3192,7 @@ class PlayState extends MusicBeatState
 		FlxG.animationTimeScale = 1;
 
 		Note.globalRgbShaders = [];
-		backend.NoteTypesConfig.clearNoteTypesData();
+		backend.config.NoteTypesConfig.clearNoteTypesData();
 
 		NoteSplash.configs.clear();
 		instance = null;
@@ -3283,13 +3291,13 @@ class PlayState extends MusicBeatState
 	public function startLuasNamed(luaFile:String)
 	{
 		#if MODS_ALLOWED
-		var luaToLoad:String = Paths.modFolders(luaFile);
+		var luaToLoad:String = PathsUtil.modFolders(luaFile);
 		if(!FileSystem.exists(luaToLoad))
-			luaToLoad = Paths.getSharedPath(luaFile);
+			luaToLoad = PathsUtil.getSharedPath(luaFile);
 
 		if(FileSystem.exists(luaToLoad))
 		#elseif sys
-		var luaToLoad:String = Paths.getSharedPath(luaFile);
+		var luaToLoad:String = PathsUtil.getSharedPath(luaFile);
 		if(OpenFlAssets.exists(luaToLoad))
 		#end
 		{
@@ -3307,11 +3315,11 @@ class PlayState extends MusicBeatState
 	public function startHScriptsNamed(scriptFile:String)
 	{
 		#if MODS_ALLOWED
-		var scriptToLoad:String = Paths.modFolders(scriptFile);
+		var scriptToLoad:String = PathsUtil.modFolders(scriptFile);
 		if(!FileSystem.exists(scriptToLoad))
-			scriptToLoad = Paths.getSharedPath(scriptFile);
+			scriptToLoad = PathsUtil.getSharedPath(scriptFile);
 		#else
-		var scriptToLoad:String = Paths.getSharedPath(scriptFile);
+		var scriptToLoad:String = PathsUtil.getSharedPath(scriptFile);
 		#end
 
 		if(FileSystem.exists(scriptToLoad))
@@ -3598,7 +3606,7 @@ class PlayState extends MusicBeatState
 			return true;
 		}
 
-		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'shaders/'))
+		for (folder in Mods.directoriesWithFile(PathsUtil.getSharedPath(), 'shaders/'))
 		{
 			var frag:String = folder + name + '.frag';
 			var vert:String = folder + name + '.vert';

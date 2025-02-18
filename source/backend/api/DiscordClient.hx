@@ -1,4 +1,4 @@
-package backend;
+package backend.api;
 
 #if DISCORD_ALLOWED
 import Sys.sleep;
@@ -10,7 +10,7 @@ import hxdiscord_rpc.Types;
 
 import flixel.util.FlxStringUtil;
 
-import backend.Constants;
+import backend.data.Constants;
 
 class DiscordClient
 {
@@ -167,7 +167,7 @@ class DiscordClient
 	#end
 }
 
-@:allow(backend.DiscordClient)
+@:allow(backend.api.DiscordClient)
 private final class DiscordPresence
 {
 	public var state(get, set):String;

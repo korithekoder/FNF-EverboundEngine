@@ -1,6 +1,6 @@
 package options;
 
-import backend.InputFormatter;
+import backend.data.InputFormatter;
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 import objects.AttachedSprite;
@@ -82,7 +82,7 @@ class ControlsSubState extends MusicBeatSubstate
 		bindOptions.push([true]);
 		bindOptions.push([true, defaultKey]);
 
-		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg = new FlxSprite().loadGraphic(PathsUtil.image('menuDesat'));
 		bg.color = keyboardColor;
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		bg.screenCenter();
@@ -108,7 +108,7 @@ class ControlsSubState extends MusicBeatSubstate
 		grpBinds = new FlxTypedGroup<Alphabet>();
 		add(grpBinds);
 
-		controllerSpr = new FlxSprite(50, 40).loadGraphic(Paths.image('controllertype'), true, 82, 60);
+		controllerSpr = new FlxSprite(50, 40).loadGraphic(PathsUtil.image('controllertype'), true, 82, 60);
 		controllerSpr.antialiasing = ClientPrefs.data.antialiasing;
 		controllerSpr.animation.add('keyboard', [0], 1, false);
 		controllerSpr.animation.add('gamepad', [1], 1, false);
@@ -325,7 +325,7 @@ class ControlsSubState extends MusicBeatSubstate
 					binding = true;
 					holdingEsc = 0;
 					ClientPrefs.toggleVolumeKeys(false);
-					FlxG.sound.play(Paths.sound('scrollMenu'));
+					FlxG.sound.play(PathsUtil.sound('scrollMenu'));
 				}
 				else
 				{
@@ -336,7 +336,7 @@ class ControlsSubState extends MusicBeatSubstate
 					createTexts();
 					curSelected = lastSel;
 					updateText();
-					FlxG.sound.play(Paths.sound('cancelMenu'));
+					FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 				}
 			}
 		}
@@ -349,7 +349,7 @@ class ControlsSubState extends MusicBeatSubstate
 				holdingEsc += elapsed;
 				if(holdingEsc > 0.5)
 				{
-					FlxG.sound.play(Paths.sound('cancelMenu'));
+					FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 					closeBinding();
 				}
 			}
@@ -364,7 +364,7 @@ class ControlsSubState extends MusicBeatSubstate
 						ClientPrefs.gamepadBinds.get(curOption[2])[altNum] = NONE;
 					ClientPrefs.clearInvalidKeys(curOption[2]);
 					updateBind(Math.floor(curSelected * 2) + altNum, onKeyboardMode ? InputFormatter.getKeyName(NONE) : InputFormatter.getGamepadName(NONE));
-					FlxG.sound.play(Paths.sound('cancelMenu'));
+					FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 					closeBinding();
 				}
 			}
@@ -458,7 +458,7 @@ class ControlsSubState extends MusicBeatSubstate
 						}
 						updateBind(Math.floor(curSelected * 2) + n, key);
 					}
-					FlxG.sound.play(Paths.sound('confirmMenu'));
+					FlxG.sound.play(PathsUtil.sound('confirmMenu'));
 					closeBinding();
 				}
 			}
@@ -506,7 +506,7 @@ class ControlsSubState extends MusicBeatSubstate
 		});
 
 		updateAlt();
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'));
 	}
 
 	function swapMode()
@@ -526,7 +526,7 @@ class ControlsSubState extends MusicBeatSubstate
 		if(doSwap)
 		{
 			curAlt = !curAlt;
-			FlxG.sound.play(Paths.sound('scrollMenu'));
+			FlxG.sound.play(PathsUtil.sound('scrollMenu'));
 		}
 		selectSpr.sprTracker = grpBlacks.members[Math.floor(curSelected * 2) + (curAlt ? 1 : 0)];
 		selectSpr.visible = (selectSpr.sprTracker != null);

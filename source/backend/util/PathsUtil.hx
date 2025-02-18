@@ -1,4 +1,4 @@
-package backend;
+package backend.util;
 
 import flixel.graphics.frames.FlxFrame.FlxFrameAngle;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -18,13 +18,12 @@ import flash.media.Sound;
 
 import haxe.Json;
 
-
 #if MODS_ALLOWED
-import backend.Mods;
+import backend.data.Mods;
 #end
 
 @:access(openfl.display.BitmapData)
-class Paths
+class PathsUtil
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
 	inline public static var VIDEO_EXT = "mp4";
@@ -351,7 +350,7 @@ class Paths
 	static public function getMultiAtlas(keys:Array<String>, ?parentFolder:String = null, ?allowGPU:Bool = true):FlxAtlasFrames
 	{
 		
-		var parentFrames:FlxAtlasFrames = Paths.getAtlas(keys[0].trim());
+		var parentFrames:FlxAtlasFrames = PathsUtil.getAtlas(keys[0].trim());
 		if(keys.length > 1)
 		{
 			var original:FlxAtlasFrames = parentFrames;
@@ -359,7 +358,7 @@ class Paths
 			parentFrames.addAtlas(original, true);
 			for (i in 1...keys.length)
 			{
-				var extraFrames:FlxAtlasFrames = Paths.getAtlas(keys[i].trim(), parentFolder, allowGPU);
+				var extraFrames:FlxAtlasFrames = PathsUtil.getAtlas(keys[i].trim(), parentFolder, allowGPU);
 				if(extraFrames != null)
 					parentFrames.addAtlas(extraFrames, true);
 			}

@@ -250,7 +250,7 @@ class ShaderFunctions
 			}
 
 			// trace('bitmapdatapath: $bitmapdataPath');
-			var value = Paths.image(bitmapdataPath);
+			var value = PathsUtil.image(bitmapdataPath);
 			if(value != null && value.bitmap != null)
 			{
 				// trace('Found bitmapdata. Width: ${value.bitmap.width} Height: ${value.bitmap.height}');

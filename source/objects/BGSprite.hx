@@ -7,7 +7,7 @@ class BGSprite extends FlxSprite
 		super(x, y);
 
 		if (animArray != null) {
-			frames = Paths.getSparrowAtlas(image);
+			frames = PathsUtil.getSparrowAtlas(image);
 			for (i in 0...animArray.length) {
 				var anim:String = animArray[i];
 				animation.addByPrefix(anim, anim, 24, loop);
@@ -18,7 +18,7 @@ class BGSprite extends FlxSprite
 			}
 		} else {
 			if(image != null) {
-				loadGraphic(Paths.image(image));
+				loadGraphic(PathsUtil.image(image));
 			}
 			active = false;
 		}

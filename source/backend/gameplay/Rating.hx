@@ -1,6 +1,6 @@
-package backend;
+package backend.gameplay;
 
-import backend.ClientPrefs;
+import backend.data.ClientPrefs;
 
 class Rating
 {

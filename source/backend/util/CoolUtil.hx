@@ -1,7 +1,7 @@
-package backend;
+package backend.util;
 
 
-import backend.Constants;
+import backend.data.Constants;
 
 class CoolUtil
 {

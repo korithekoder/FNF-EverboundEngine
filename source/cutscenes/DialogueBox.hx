@@ -1,7 +1,7 @@
 package cutscenes;
 
 import flixel.addons.text.FlxTypeText;
-import backend.Song;
+import backend.data.Song;
 
 class DialogueBox extends FlxSpriteGroup
 {
@@ -25,7 +25,7 @@ class DialogueBox extends FlxSpriteGroup
 	var bgFade:FlxSprite;
 	var skipText:FlxText;
 
-	var songName:String = Paths.formatToSongPath(Song.loadedSongName);
+	var songName:String = PathsUtil.formatToSongPath(Song.loadedSongName);
 	public function new(talkingRight:Bool = true, ?dialogueList:Array<String>)
 	{
 		super();
@@ -48,19 +48,19 @@ class DialogueBox extends FlxSpriteGroup
 		switch (songName)
 		{
 			case 'senpai':
-				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-pixel');
+				box.frames = PathsUtil.getSparrowAtlas('weeb/pixelUI/dialogueBox-pixel');
 				box.animation.addByPrefix('normalOpen', 'Text Box Appear', 24, false);
 				box.animation.addByIndices('normal', 'Text Box Appear instance 1', [4], '', 24);
 			case 'roses':
-				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-senpaiMad');
+				box.frames = PathsUtil.getSparrowAtlas('weeb/pixelUI/dialogueBox-senpaiMad');
 				box.animation.addByPrefix('normalOpen', 'SENPAI ANGRY IMPACT SPEECH', 24, false);
 				box.animation.addByIndices('normal', 'SENPAI ANGRY IMPACT SPEECH instance 1', [4], '', 24);
 			case 'thorns':
-				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-evil');
+				box.frames = PathsUtil.getSparrowAtlas('weeb/pixelUI/dialogueBox-evil');
 				box.animation.addByPrefix('normalOpen', 'Spirit Textbox spawn', 24, false);
 				box.animation.addByIndices('normal', 'Spirit Textbox spawn instance 1', [11], '', 24);
 
-				var face:FlxSprite = new FlxSprite(320, 170).loadGraphic(Paths.image('weeb/spiritFaceForward'));
+				var face:FlxSprite = new FlxSprite(320, 170).loadGraphic(PathsUtil.image('weeb/spiritFaceForward'));
 				face.setGraphicSize(Std.int(face.width * 6));
 				add(face);
 			default:
@@ -73,7 +73,7 @@ class DialogueBox extends FlxSpriteGroup
 			return;
 		
 		portraitLeft = new FlxSprite(-20, 40);
-		portraitLeft.frames = Paths.getSparrowAtlas('weeb/senpaiPortrait');
+		portraitLeft.frames = PathsUtil.getSparrowAtlas('weeb/senpaiPortrait');
 		portraitLeft.animation.addByPrefix('enter', 'Senpai Portrait Enter', 24, false);
 		portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
 		portraitLeft.updateHitbox();
@@ -82,7 +82,7 @@ class DialogueBox extends FlxSpriteGroup
 		portraitLeft.visible = false;
 
 		portraitRight = new FlxSprite(0, 40);
-		portraitRight.frames = Paths.getSparrowAtlas('weeb/bfPortrait');
+		portraitRight.frames = PathsUtil.getSparrowAtlas('weeb/bfPortrait');
 		portraitRight.animation.addByPrefix('enter', 'Boyfriend portrait enter', 24, false);
 		portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
 		portraitRight.updateHitbox();
@@ -98,16 +98,16 @@ class DialogueBox extends FlxSpriteGroup
 		box.screenCenter(X);
 		portraitLeft.screenCenter(X);
 
-		handSelect = new FlxSprite(1042, 590).loadGraphic(Paths.image('weeb/pixelUI/hand_textbox'));
+		handSelect = new FlxSprite(1042, 590).loadGraphic(PathsUtil.image('weeb/pixelUI/hand_textbox'));
 		handSelect.setGraphicSize(Std.int(handSelect.width * PlayState.daPixelZoom * 0.9));
 		handSelect.updateHitbox();
 		handSelect.visible = false;
 		add(handSelect);
 
 		swagDialogue = new FlxTypeText(240, 500, Std.int(FlxG.width * 0.6), '', 32);
-		swagDialogue.font = Paths.font('pixel-latin.ttf');
+		swagDialogue.font = PathsUtil.font('pixel-latin.ttf');
 		swagDialogue.color = 0xFF3F2021;
-		swagDialogue.sounds = [FlxG.sound.load(Paths.sound('pixelText'), 0.6)];
+		swagDialogue.sounds = [FlxG.sound.load(PathsUtil.sound('pixelText'), 0.6)];
 		swagDialogue.borderStyle = SHADOW;
 		swagDialogue.borderColor = 0xFFD89494;
 		swagDialogue.shadowOffset.set(2, 2);
@@ -155,7 +155,7 @@ class DialogueBox extends FlxSpriteGroup
 			if (dialogueStarted && !isEnding)
 			{
 				dialogueCompleted();
-				FlxG.sound.play(Paths.sound('clickText'), 0.8);
+				FlxG.sound.play(PathsUtil.sound('clickText'), 0.8);
 			}
 		}
 		else if(Controls.instance.ACCEPT)
@@ -171,12 +171,12 @@ class DialogueBox extends FlxSpriteGroup
 				{
 					dialogueList.remove(dialogueList[0]);
 					startDialogue();
-					FlxG.sound.play(Paths.sound('clickText'), 0.8);
+					FlxG.sound.play(PathsUtil.sound('clickText'), 0.8);
 				}
 			}
 			else if (dialogueStarted)
 			{
-				FlxG.sound.play(Paths.sound('clickText'), 0.8);
+				FlxG.sound.play(PathsUtil.sound('clickText'), 0.8);
 				swagDialogue.skip();
 				
 				if(skipDialogueThing != null) {
@@ -190,7 +190,7 @@ class DialogueBox extends FlxSpriteGroup
 	function dialogueCompleted()
 	{
 		isEnding = true;
-		FlxG.sound.play(Paths.sound('clickText'), 0.8);	
+		FlxG.sound.play(PathsUtil.sound('clickText'), 0.8);	
 
 		if (songName == 'senpai' || songName == 'thorns')
 			FlxG.sound.music.fadeOut(1.5, 0, (_) -> FlxG.sound.music.stop());

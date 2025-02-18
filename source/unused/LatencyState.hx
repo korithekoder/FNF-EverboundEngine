@@ -10,7 +10,7 @@ class LatencyState extends FlxState
 
 	override function create()
 	{
-		FlxG.sound.playMusic(Paths.sound('soundTest'));
+		FlxG.sound.playMusic(PathsUtil.sound('soundTest'));
 
 		noteGrp = new FlxTypedGroup<Note>();
 		add(noteGrp);

@@ -1,4 +1,6 @@
-package backend;
+package backend.gameplay;
+
+import backend.data.WeekData;
 
 class Difficulty
 {
@@ -16,11 +18,11 @@ class Difficulty
 		if(num == null) num = PlayState.storyDifficulty;
 
 		var filePostfix:String = list[num];
-		if(filePostfix != null && Paths.formatToSongPath(filePostfix) != Paths.formatToSongPath(defaultDifficulty))
+		if(filePostfix != null && PathsUtil.formatToSongPath(filePostfix) != PathsUtil.formatToSongPath(defaultDifficulty))
 			filePostfix = '-' + filePostfix;
 		else
 			filePostfix = '';
-		return Paths.formatToSongPath(filePostfix);
+		return PathsUtil.formatToSongPath(filePostfix);
 	}
 
 	inline public static function loadFromWeek(week:WeekData = null)

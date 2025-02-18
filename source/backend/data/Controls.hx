@@ -1,4 +1,4 @@
-package backend;
+package backend.data;
 
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.keyboard.FlxKey;
@@ -10,17 +10,17 @@ import flixel.input.keyboard.FlxKey;
  * create variables in this class, although you will have to use (for example):
  * 
  * ```haxe
- * Controls.pressed('note_up');  // Key that is held down
- * Controls.justPressed('note_up');  // Key that was just pressed
- * Controls.justReleased('note_up');  // Key that was just released
+ * Controls.instance.pressed('note_up');  // Key that is held down
+ * Controls.instance.justPressed('note_up');  // Key that was just pressed
+ * Controls.instance.justReleased('note_up');  // Key that was just released
  * ```
  * 
  * Instead of:
  * 
  * ```haxe
- * Controls.NOTE_UP;  // Key that is held down
- * Controls.NOTE_UP_P;  // Key that was just pressed
- * Controls.NOTE_UP_R;  // Key that was just released
+ * Controls.instance.NOTE_UP;  // Key that is held down
+ * Controls.instance.NOTE_UP_P;  // Key that was just pressed
+ * Controls.instance.NOTE_UP_R;  // Key that was just released
  * ```
  * 
  * Remember that you can add your own keybinds by going to `ClientPrefs.hx` (inside the `backend` package) and

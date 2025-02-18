@@ -13,7 +13,7 @@ class LanguageSubState extends MusicBeatSubstate
 	{
 		super();
 
-		var bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		var bg = new FlxSprite().loadGraphic(PathsUtil.image('menuDesat'));
 		bg.color = 0xFFea71fd;
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		bg.screenCenter();
@@ -22,7 +22,7 @@ class LanguageSubState extends MusicBeatSubstate
 
 		languages.push(ClientPrefs.defaultData.language); //English (US)
 		displayLanguages.set(ClientPrefs.defaultData.language, Language.defaultLangName);
-		var directories:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'data/');
+		var directories:Array<String> = Mods.directoriesWithFile(PathsUtil.getSharedPath(), 'data/');
 		for (directory in directories)
 		{
 			for (file in FileSystem.readDirectory(directory))
@@ -116,12 +116,12 @@ class LanguageSubState extends MusicBeatSubstate
 				MusicBeatState.resetState();
 			}
 			else close();
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.play(PathsUtil.sound('cancelMenu'));
 		}
 
 		if(controls.ACCEPT)
 		{
-			FlxG.sound.play(Paths.sound('confirmMenu'), 0.6);
+			FlxG.sound.play(PathsUtil.sound('confirmMenu'), 0.6);
 			ClientPrefs.data.language = languages[curSelected];
 			//trace(ClientPrefs.data.language);
 			ClientPrefs.saveSettings();
@@ -139,7 +139,7 @@ class LanguageSubState extends MusicBeatSubstate
 			lang.alpha = 0.6;
 			if(num == curSelected) lang.alpha = 1;
 		}
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.6);
+		FlxG.sound.play(PathsUtil.sound('scrollMenu'), 0.6);
 	}
 	#end
 }

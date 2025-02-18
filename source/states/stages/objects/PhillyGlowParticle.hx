@@ -10,7 +10,7 @@ class PhillyGlowParticle extends FlxSprite
 		super(x, y);
 		this.color = color;
 
-		loadGraphic(Paths.image('philly/particle'));
+		loadGraphic(PathsUtil.image('philly/particle'));
 		antialiasing = ClientPrefs.data.antialiasing;
 		start();
 	}

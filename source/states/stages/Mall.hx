@@ -38,7 +38,7 @@ class Mall extends BaseStage
 
 		santa = new BGSprite('christmas/santa', -840, 150, 1, 1, ['santa idle in fear']);
 		add(santa);
-		Paths.sound('Lights_Shut_off');
+		PathsUtil.sound('Lights_Shut_off');
 		setDefaultGF('gf-christmas');
 
 		if(isStoryMode && !seenCutscene)
@@ -79,10 +79,10 @@ class Mall extends BaseStage
 			return;
 		}
 
-		var nextSong:String = Paths.formatToSongPath(PlayState.storyPlaylist[1]);
+		var nextSong:String = PathsUtil.formatToSongPath(PlayState.storyPlaylist[1]);
 		if(nextSong == 'winter-horrorland')
 		{
-			FlxG.sound.play(Paths.sound('Lights_Shut_off'));
+			FlxG.sound.play(PathsUtil.sound('Lights_Shut_off'));
 
 			var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
 				-FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);

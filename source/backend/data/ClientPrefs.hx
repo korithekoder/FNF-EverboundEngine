@@ -1,4 +1,4 @@
-package backend;
+package backend.data;
 
 import backend.util.CacheUtil;
 import flixel.util.FlxSave;
@@ -197,6 +197,16 @@ import flixel.input.gamepad.FlxGamepadInputID;
 		'botplay' => false,
 		'opponentplay' => false
 	];
+
+	/**
+	 * Should there be a background behind the strumline?
+	 */
+	public var noteLanes:Bool = false;
+
+	/**
+	 * How transparent the note lanes should be.
+	 */
+	public var noteLaneAlpha:Float = 0.4;
 
 	/**
 	 * How much the hit windows will be shifted for each note combo type.

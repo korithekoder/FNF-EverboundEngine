@@ -1,7 +1,7 @@
 #if !macro
 //Discord API
 #if DISCORD_ALLOWED
-import backend.Discord;
+import backend.api.DiscordClient;
 #end
 
 //Psych
@@ -11,7 +11,7 @@ import llua.Lua;
 #end
 
 #if ACHIEVEMENTS_ALLOWED
-import backend.Achievements;
+import backend.gameplay.Achievements;
 #end
 
 #if sys
@@ -21,18 +21,18 @@ import sys.io.*;
 import js.html.*;
 #end
 
-import backend.Paths;
-import backend.Controls;
-import backend.CoolUtil;
-import backend.MusicBeatState;
-import backend.MusicBeatSubstate;
-import backend.CustomFadeTransition;
-import backend.ClientPrefs;
-import backend.Conductor;
-import backend.BaseStage;
-import backend.Difficulty;
-import backend.Mods;
-import backend.Language;
+import backend.util.PathsUtil;
+import backend.data.Controls;
+import backend.util.CoolUtil;
+import backend.display.MusicBeatState;
+import backend.display.MusicBeatSubstate;
+import backend.display.CustomFadeTransition;
+import backend.data.ClientPrefs;
+import backend.gameplay.Conductor;
+import backend.display.BaseStage;
+import backend.gameplay.Difficulty;
+import backend.data.Mods;
+import backend.data.Language;
 
 import backend.ui.*; // Psych-UI
 

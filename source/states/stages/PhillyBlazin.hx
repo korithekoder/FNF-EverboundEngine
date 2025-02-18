@@ -36,7 +36,7 @@ class PhillyBlazin extends BaseStage
 
 		if(!ClientPrefs.data.lowQuality)
 		{
-			var skyImage = Paths.image('phillyBlazin/skyBlur');
+			var skyImage = PathsUtil.image('phillyBlazin/skyBlur');
 			scrollingSky = new FlxTiledSprite(skyImage, Std.int(skyImage.width * 1.1) + 475, Std.int(skyImage.height / 1.1), true, false);
 			scrollingSky.antialiasing = ClientPrefs.data.antialiasing;
 			scrollingSky.setPosition(-500, -120);
@@ -167,7 +167,7 @@ class PhillyBlazin extends BaseStage
 	{
 		for (i in 1...4)
 		{
-			Paths.sound('lightning/Lightning$i');
+			PathsUtil.sound('lightning/Lightning$i');
 		}
 	}
 
@@ -230,7 +230,7 @@ class PhillyBlazin extends BaseStage
 		FlxTween.color(abot, LIGHTNING_FADE_DURATION, 0xFF606060, 0xFF888888);
 
 		// Sound
-		FlxG.sound.play(Paths.soundRandom('lightning/Lightning', 1, 3));
+		FlxG.sound.play(PathsUtil.soundRandom('lightning/Lightning', 1, 3));
 	}
 
 	// Note functions

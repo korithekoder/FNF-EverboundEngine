@@ -1,4 +1,4 @@
-package backend;
+package backend.data;
 
 typedef ModsList = {
 	enabled:Array<String>,
@@ -47,7 +47,7 @@ class Mods
 	{
 		var list:Array<String> = [];
 		#if MODS_ALLOWED
-		var modsFolder:String = Paths.mods();
+		var modsFolder:String = PathsUtil.mods();
 		if(FileSystem.exists(modsFolder)) {
 			for (folder in FileSystem.readDirectory(modsFolder))
 			{
@@ -62,7 +62,7 @@ class Mods
 	
 	inline public static function mergeAllTextsNamed(path:String, ?defaultDirectory:String = null, allowDuplicates:Bool = false)
 	{
-		if(defaultDirectory == null) defaultDirectory = Paths.getSharedPath();
+		if(defaultDirectory == null) defaultDirectory = PathsUtil.getSharedPath();
 		defaultDirectory = defaultDirectory.trim();
 		if(!defaultDirectory.endsWith('/')) defaultDirectory += '/';
 		if(!defaultDirectory.startsWith('assets/')) defaultDirectory = 'assets/$defaultDirectory';
@@ -93,9 +93,9 @@ class Mods
 		if(FileSystem.exists(path + fileToFind))
 			foldersToCheck.push(path + fileToFind);
 
-		if(Paths.currentLevel != null && Paths.currentLevel != path)
+		if(PathsUtil.currentLevel != null && PathsUtil.currentLevel != path)
 		{
-			var pth:String = Paths.getFolderPath(fileToFind, Paths.currentLevel);
+			var pth:String = PathsUtil.getFolderPath(fileToFind, PathsUtil.currentLevel);
 			if(FileSystem.exists(pth))
 				foldersToCheck.push(pth);
 		}
@@ -106,18 +106,18 @@ class Mods
 			// Global mods first
 			for(mod in Mods.getGlobalMods())
 			{
-				var folder:String = Paths.mods(mod + '/' + fileToFind);
+				var folder:String = PathsUtil.mods(mod + '/' + fileToFind);
 				if(FileSystem.exists(folder) && !foldersToCheck.contains(folder)) foldersToCheck.push(folder);
 			}
 
 			// Then "PsychEngine/mods/" main folder
-			var folder:String = Paths.mods(fileToFind);
-			if(FileSystem.exists(folder) && !foldersToCheck.contains(folder)) foldersToCheck.push(Paths.mods(fileToFind));
+			var folder:String = PathsUtil.mods(fileToFind);
+			if(FileSystem.exists(folder) && !foldersToCheck.contains(folder)) foldersToCheck.push(PathsUtil.mods(fileToFind));
 
 			// And lastly, the loaded mod's folder
 			if(Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0)
 			{
-				var folder:String = Paths.mods(Mods.currentModDirectory + '/' + fileToFind);
+				var folder:String = PathsUtil.mods(Mods.currentModDirectory + '/' + fileToFind);
 				if(FileSystem.exists(folder) && !foldersToCheck.contains(folder)) foldersToCheck.push(folder);
 			}
 		}
@@ -130,7 +130,7 @@ class Mods
 		#if MODS_ALLOWED
 		if(folder == null) folder = Mods.currentModDirectory;
 
-		var path = Paths.mods(folder + '/pack.json');
+		var path = PathsUtil.mods(folder + '/pack.json');
 		if(FileSystem.exists(path)) {
 			try {
 				#if sys
@@ -184,7 +184,7 @@ class Mods
 			{
 				var dat:Array<String> = mod.split("|");
 				var folder:String = dat[0];
-				if(folder.trim().length > 0 && FileSystem.exists(Paths.mods(folder)) && FileSystem.isDirectory(Paths.mods(folder)) && !added.contains(folder))
+				if(folder.trim().length > 0 && FileSystem.exists(PathsUtil.mods(folder)) && FileSystem.isDirectory(PathsUtil.mods(folder)) && !added.contains(folder))
 				{
 					added.push(folder);
 					list.push([folder, (dat[1] == "1")]);
@@ -197,7 +197,7 @@ class Mods
 		// Scan for folders that aren't on modsList.txt yet
 		for (folder in getModDirectories())
 		{
-			if(folder.trim().length > 0 && FileSystem.exists(Paths.mods(folder)) && FileSystem.isDirectory(Paths.mods(folder)) &&
+			if(folder.trim().length > 0 && FileSystem.exists(PathsUtil.mods(folder)) && FileSystem.isDirectory(PathsUtil.mods(folder)) &&
 			!ignoreModFolders.contains(folder.toLowerCase()) && !added.contains(folder))
 			{
 				added.push(folder);
